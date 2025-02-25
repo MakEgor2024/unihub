@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniHub — Всё для студента МГУТУ</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>UniHub МГУТУ</h1>
+        <nav>
+            <ul>
+                <li><a href="#news">Новости</a></li>
+                <li><a href="#sports">Спорт</a></li>
+                <li><a href="#science">Наука</a></li>
+                <li><a href="#schedule">Расписание</a></li>
+            </ul>
+        </nav>
+        <div class="search-bar">
+            <input type="text" id="search-input" placeholder="Поиск по сайту...">
+        </div>
+    </header>
+
+   <!-- Раздел Новости -->
+<section id="news">
+    <h2>Новости МГУТУ</h2>
+    <div class="telegram-widget">
+        <script async src="https://telegram.org/js/telegram-widget.js?22"
+            data-telegram-channel="@razumnews"  <!-- Исправлено: канал вместо поста -->
+            data-width="100%"
+            data-height="500"
+            data-limit="5">  <!-- Показывать последние 5 постов -->
+        </script>
+    </div>
+</section>
+
+    <!-- Раздел Спорт -->
+<section id="sports">
+    <h2>Спорт</h2>
+    <div class="telegram-widget">
+        <script async src="https://telegram.org/js/telegram-widget.js?22"
+            data-telegram-channel="@familyssckazak"
+            data-width="100%"
+            data-height="500"
+            data-limit="5">
+        </script>
+    </div>
+</section>
+
+<!-- Раздел Наука -->
+<section id="science">
+    <h2>Научное сообщество</h2>
+    <div class="telegram-widget">
+        <script async src="https://telegram.org/js/telegram-widget.js?22"
+            data-telegram-channel="@SNOMGUTM"
+            data-width="100%"
+            data-height="500"
+            data-limit="5">
+        </script>
+    </div>
+</section>
+
+    <!-- Раздел Расписание -->
+    <section id="schedule">
+        <h2>Расписание (ФСГТ)</h2>
+        <iframe src="https://calendar.google.com/calendar/embed?src=example%40gmail.com&ctz=Europe%2FMoscow" 
+                style="border: 0" width="100%" height="600" frameborder="0" scrolling="no"></iframe>
+    </section>
+
+    <footer>
+        <p>© 2024 UniHub МГУТУ. Все права защищены.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
