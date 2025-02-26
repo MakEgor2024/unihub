@@ -1,105 +1,138 @@
+/* style.css */
+:root {
+    --primary-color: #003366;
+    --accent-color: #FFD700;
+    --bg-color: #ffffff;
+    --text-color: #222222;
+}
+
+body.dark {
+    --bg-color: #1a1a1a;
+    --text-color: #e0e0e0;
+    --primary-color: #2c3e50;
+}
+
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    line-height: 1.6;
-    background-color: #f4f4f4;
+    background: var(--bg-color);
+    color: var(--text-color);
+    transition: all 0.3s ease;
 }
 
 header {
-    background: #003366; /* Синий */
-    color: white;
+    background: var(--primary-color);
     padding: 1rem 0;
-    text-align: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 2rem;
+    flex-wrap: wrap;
 }
 
 nav ul {
     list-style: none;
     padding: 0;
+    margin: 0;
+    display: flex;
 }
 
 nav ul li {
-    display: inline;
     margin: 0 15px;
 }
 
-nav ul li a {
+nav a {
     color: white;
     text-decoration: none;
+    font-weight: bold;
 }
 
-.search-bar {
-    margin-top: 1rem;
-}
-
-#search-input {
+.search-bar input {
     padding: 0.5rem;
-    width: 80%;
-    max-width: 400px;
-    border: 2px solid #FFD700; /* Золотой */
+    border: 2px solid var(--accent-color);
     border-radius: 5px;
+    margin: 0.5rem 0;
 }
-
-section {
-    padding: 2rem;
-    margin: 1rem auto;
-    max-width: 1200px;
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.telegram-channels {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
-}
-
-.telegram-channels .channel-card {
-    background: #003366; /* Синий */
-    color: white;
-    padding: 1rem;
-    border-radius: 8px;
-    text-align: center;
-    transition: transform 0.3s ease;
-}
-
-.telegram-channels .channel-card:hover {
-    transform: scale(1.05);
-}
-
-footer {
-    background: #003366; /* Синий */
-    color: white;
-    text-align: center;
-    padding: 1rem 0;
-    position: fixed;
-    width: 100%;
-    bottom: 0;
 
 .telegram-widget {
     margin: 20px 0;
-    border: 2px solid #FFD700;
+    border: 2px solid var(--accent-color);
     border-radius: 8px;
-    background: white;
+    padding: 1rem;
+    background: var(--bg-color);
 }
 
-section {
-    padding: 2rem;
-    margin: 1rem auto;
-    max-width: 1200px;
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+.schedule-table {
+    overflow-x: auto;
+    margin: 1rem 0;
 }
 
-/* Адаптация под мобильные устройства */
+#auto-schedule {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#auto-schedule th {
+    background: var(--primary-color);
+    color: white;
+    padding: 1rem;
+    position: sticky;
+    top: 0;
+}
+
+#auto-schedule td {
+    padding: 0.8rem;
+    border-bottom: 1px solid #ddd;
+}
+
+#auto-schedule tr:hover {
+    background: rgba(255, 215, 0, 0.1);
+}
+
+.schedule-controls {
+    margin: 1rem 0;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+button {
+    background: var(--accent-color);
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+footer {
+    background: var(--primary-color);
+    color: white;
+    text-align: center;
+    padding: 1rem;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
 @media (max-width: 768px) {
     .telegram-widget {
         height: 400px;
     }
-
-    iframe {
-        height: 400px;
+    
+    #auto-schedule {
+        font-size: 0.9em;
+    }
+    
+    .controls {
+        flex-direction: column;
+        align-items: flex-start;
     }
 }

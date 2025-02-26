@@ -3,75 +3,196 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UniHub — Всё для студента МГУТУ</title>
+    <title>UniHub МГУТУ</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/ical.js@1.0.1/dist/ical.min.js"></script>
 </head>
 <body>
     <header>
         <h1>UniHub МГУТУ</h1>
-        <nav>
-            <ul>
-                <li><a href="#news">Новости</a></li>
-                <li><a href="#sports">Спорт</a></li>
-                <li><a href="#science">Наука</a></li>
-                <li><a href="#schedule">Расписание</a></li>
-            </ul>
-        </nav>
-        <div class="search-bar">
-            <input type="text" id="search-input" placeholder="Поиск по сайту...">
+        <div class="controls">
+            <button class="theme-switch">🌙</button>
+            <nav>
+                <ul>
+                    <li><a href="#news">Новости</a></li>
+                    <li><a href="#sports">Спорт</a></li>
+                    <li><a href="#science">Наука</a></li>
+                    <li><a href="#schedule">Расписание</a></li>
+                </ul>
+            </nav>
+            <div class="search-bar">
+                <input type="text" id="search-input" placeholder="Поиск...">
+            </div>
         </div>
     </header>
 
-   <!-- Раздел Новости -->
-<section id="news">
-    <h2>Новости МГУТУ</h2>
-    <div class="telegram-widget">
-        <script async src="https://telegram.org/js/telegram-widget.js?22"
-            data-telegram-channel="@razumnews"  <!-- Исправлено: канал вместо поста -->
-            data-width="100%"
-            data-height="500"
-            data-limit="5">  <!-- Показывать последние 5 постов -->
-        </script>
-    </div>
-</section>
+    <!-- НОВОСТИ -->
+    <section id="news">
+        <h2>Новости МГУТУ</h2>
+        <div class="telegram-widget" data-channel="razumnews"></div>
+    </section>
 
-    <!-- Раздел Спорт -->
-<section id="sports">
-    <h2>Спорт</h2>
-    <div class="telegram-widget">
-        <script async src="https://telegram.org/js/telegram-widget.js?22"
-            data-telegram-channel="@familyssckazak"
-            data-width="100%"
-            data-height="500"
-            data-limit="5">
-        </script>
-    </div>
-</section>
+    <!-- СПОРТ -->
+    <section id="sports">
+        <h2>Спорт</h2>
+        <div class="telegram-widget" data-channel="familyssckazak"></div>
+    </section>
 
-<!-- Раздел Наука -->
-<section id="science">
-    <h2>Научное сообщество</h2>
-    <div class="telegram-widget">
-        <script async src="https://telegram.org/js/telegram-widget.js?22"
-            data-telegram-channel="@SNOMGUTM"
-            data-width="100%"
-            data-height="500"
-            data-limit="5">
-        </script>
-    </div>
-</section>
+    <!-- НАУКА -->
+    <section id="science">
+        <h2>Научное сообщество</h2>
+        <div class="telegram-widget" data-channel="SNOMGUTM"></div>
+    </section>
 
-    <!-- Раздел Расписание -->
+    <!-- РАСПИСАНИЕ -->
     <section id="schedule">
-        <h2>Расписание (ФСГТ)</h2>
-        <iframe src="https://calendar.google.com/calendar/embed?src=example%40gmail.com&ctz=Europe%2FMoscow" 
-                style="border: 0" width="100%" height="600" frameborder="0" scrolling="no"></iframe>
+        <h2>Расписание группы 440301-ООИЯо-22/3</h2>
+        <div class="schedule-controls">
+            <select id="week-filter">
+                <option value="all">Вся неделя</option>
+                <option value="even">Чётная неделя</option>
+                <option value="odd">Нечётная неделя</option>
+            </select>
+            <button onclick="exportToCalendar()">Экспорт в Google Calendar</button>
+        </div>
+        <div id="schedule-loader">Загрузка...</div>
+        <div class="schedule-table">
+            <table id="auto-schedule">
+                <thead>
+                    <tr>
+                        <th>Дата</th>
+                        <th>Время</th>
+                        <th>Дисциплина</th>
+                        <th>Преподаватель</th>
+                        <th>Аудитория</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Данные подгружаются автоматически -->
+                </tbody>
+            </table>
+        </div>
     </section>
 
     <footer>
         <p>© 2024 UniHub МГУТУ. Все права защищены.</p>
     </footer>
 
-    <script src="script.js"></script>
+    <script>
+        // ТЕМНАЯ ТЕМА
+        const themeSwitch = document.querySelector('.theme-switch');
+        const currentTheme = localStorage.getItem('theme');
+
+        const applyTheme = (theme) => {
+            document.body.className = theme;
+            themeSwitch.textContent = theme === 'dark' ? '☀️' : '🌙';
+        };
+
+        themeSwitch.addEventListener('click', () => {
+            const newTheme = document.body.className === 'dark' ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        if (currentTheme) {
+            applyTheme(currentTheme);
+        } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            applyTheme('dark');
+        }
+
+        // РАСПИСАНИЕ
+        async function loadICalSchedule() {
+            try {
+                const response = await fetch('https://dec.mgutm.ru/api/Rasp?idStudent=28871&iCal=true');
+                const icalData = await response.text();
+                const events = ical.parseICS(icalData);
+                
+                const tbody = document.querySelector('#auto-schedule tbody');
+                tbody.innerHTML = '';
+                
+                Object.values(events).forEach(event => {
+                    if (event.type === 'VEVENT') {
+                        const date = event.start.toLocaleDateString('ru-RU');
+                        const time = `${event.start.toLocaleTimeString('ru-RU')} - ${event.end.toLocaleTimeString('ru-RU')}`;
+                        
+                        const row = `
+                            <tr>
+                                <td>${date}</td>
+                                <td>${time}</td>
+                                <td>${event.summary}</td>
+                                <td>${event.description || '-'}</td>
+                                <td>${event.location || '-'}</td>
+                            </tr>
+                        `;
+                        tbody.insertAdjacentHTML('beforeend', row);
+                    }
+                });
+                
+                document.getElementById('schedule-loader').style.display = 'none';
+            } catch (error) {
+                document.getElementById('schedule-loader').innerHTML = 'Ошибка загрузки';
+                console.error(error);
+            }
+        }
+
+        // ФИЛЬТРАЦИЯ РАСПИСАНИЯ
+        document.getElementById('week-filter').addEventListener('change', (e) => {
+            const filter = e.target.value;
+            const rows = document.querySelectorAll('#auto-schedule tbody tr');
+            
+            rows.forEach(row => {
+                const date = row.cells[0].textContent;
+                const day = new Date(date).getDate();
+                
+                if (filter === 'all' || 
+                    (filter === 'even' && day % 2 === 0) || 
+                    (filter === 'odd' && day % 2 !== 0)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+
+        // ЭКСПОРТ В КАЛЕНДАРЬ
+        function exportToCalendar() {
+            const events = document.querySelectorAll('#auto-schedule tbody tr');
+            let ical = 'BEGIN:VCALENDAR\nVERSION:2.0\n';
+            
+            events.forEach(event => {
+                const [date, time, title, , location] = event.cells;
+                const [start, end] = time.textContent.split(' - ');
+                const dateTime = date.textContent.split('.');
+                
+                ical += `BEGIN:VEVENT\n` +
+                        `SUMMARY:${title.textContent}\n` +
+                        `LOCATION:${location.textContent}\n` +
+                        `DTSTART:${dateTime[2]}${dateTime[1]}${dateTime[0]}T${start.replace(':', '')}00\n` +
+                        `DTEND:${dateTime[2]}${dateTime[1]}${dateTime[0]}T${end.replace(':', '')}00\n` +
+                        `END:VEVENT\n`;
+            });
+            
+            ical += 'END:VCALENDAR';
+            const blob = new Blob([ical], { type: 'text/calendar' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'schedule.ics';
+            link.click();
+        }
+
+        // ПОИСК
+        document.getElementById('search-input').addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            const rows = document.querySelectorAll('#auto-schedule tbody tr');
+            
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(query) ? '' : 'none';
+            });
+        });
+
+        // ИНИЦИАЛИЗАЦИЯ
+        loadICalSchedule();
+    </script>
 </body>
 </html>
