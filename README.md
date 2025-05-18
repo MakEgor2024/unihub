@@ -1,1 +1,1517 @@
-# unihub
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniHub - Профориентация v5</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lucide-static@latest/font/Lucide.css">
+    <style>
+        /* --- CSS Стили (v5 - Финальная версия) --- */
+        :root {
+            /* Светлая тема (основная) - чуть насыщеннее */
+            --primary-color-light: #0a4a8e; /* Темно-синий */
+            --accent-color-light: #facc15; /* Желтый */
+            --accent-color-darker-light: #eab308;
+            --bg-color-light: #f1f5f9; /* Светло-серый фон (slate-100) */
+            --text-color-light: #1e293b; /* Темно-серый текст (slate-800) */
+            --text-muted-color-light: #64748b; /* Приглушенный текст (slate-500) */
+            --card-bg-light: #ffffff; /* Белый фон карточек */
+            --border-color-light: #e2e8f0; /* Цвет границ (slate-200) */
+
+
+            /* Темная тема */
+            --primary-color-dark: #38bdf8; /* lightBlue-400 */
+            --accent-color-dark: #facc15; /* yellow-400 */
+            --accent-color-darker-dark: #eab308;
+            --bg-color-dark: #0f172a; /* slate-900 */
+            --text-color-dark: #e2e8f0; /* slate-200 */
+            --text-muted-color-dark: #94a3b8; /* slate-400 */
+            --card-bg-dark: #1e293b; /* slate-800 */
+            --border-color-dark: #334155; /* slate-700 */
+
+
+            /* Общие переменные */
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --transition: all 0.2s ease-in-out;
+            --border-radius-sm: 0.375rem; /* 6px */
+            --border-radius-md: 0.5rem; /* 8px */
+            --border-radius-lg: 0.75rem; /* 12px */
+            --border-radius-full: 9999px;
+
+
+            /* Цвета RIASEC (одинаковые для обеих тем для простоты, можно настроить) */
+            --realistic-color: #ef4444; --investigative-color: #3b82f6; --artistic-color: #a855f7;
+            --social-color: #22c55e; --enterprising-color: #f97316; --conventional-color: #64748b;
+
+
+            /* Применение переменных темы по умолчанию (светлая) */
+            --primary-color: var(--primary-color-light);
+            --accent-color: var(--accent-color-light);
+            --accent-color-darker: var(--accent-color-darker-light);
+            --bg-color: var(--bg-color-light);
+            --text-color: var(--text-color-light);
+            --text-muted-color: var(--text-muted-color-light);
+            --card-bg: var(--card-bg-light);
+            --border-color: var(--border-color-light);
+        }
+
+
+        /* Применение переменных для темной темы */
+        body.dark {
+            --primary-color: var(--primary-color-dark);
+            --accent-color: var(--accent-color-dark);
+            --accent-color-darker: var(--accent-color-darker-dark);
+            --bg-color: var(--bg-color-dark);
+            --text-color: var(--text-color-dark);
+            --text-muted-color: var(--text-muted-color-dark);
+            --card-bg: var(--card-bg-dark);
+            --border-color: var(--border-color-dark);
+        }
+
+
+        /* Базовые стили */
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 80px 0 100px;
+            background: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color var(--transition), color var(--transition);
+            line-height: 1.6;
+            font-size: 16px;
+        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-color); }
+        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--text-muted-color); }
+
+
+        /* Утилиты */
+        .hidden { display: none !important; }
+        .icon { display: inline-block; vertical-align: middle; width: 1.1em; height: 1.1em; stroke-width: 2; margin-right: 0.3em; margin-bottom: 0.1em; }
+        .icon-only { margin-right: 0; }
+        .icon-sm { width: 0.9em; height: 0.9em; margin-right: 0.2em;}
+        .icon-lg { width: 1.5em; height: 1.5em; }
+        /* Стиль для подсветки текста */
+        mark { background-color: var(--accent-color); color: var(--primary-color-light); /* Всегда темный текст на желтом */ padding: 0.1em 0.2em; border-radius: var(--border-radius-sm); font-weight: 500; }
+        body.dark mark { background-color: var(--accent-color); color: #333; } /* Темный текст на желтом и в темной теме */
+
+
+        /* Хедер */
+        header {
+            background: var(--card-bg); color: var(--text-color); padding: 0.8rem 1rem;
+            position: fixed; top: 0; left: 0; width: 100%; box-shadow: var(--shadow);
+            z-index: 1000; transition: var(--transition); border-bottom: 1px solid var(--border-color);
+        }
+        .header-content { display: flex; justify-content: space-between; align-items: center; max-width: 1280px; margin: 0 auto; gap: 1rem; flex-wrap: wrap; }
+        .logo { font-size: 1.5rem; font-weight: 700; color: var(--primary-color-light); } /* Лого всегда синий */
+        body.dark .logo { color: var(--primary-color); } /* В темной теме - голубой */
+        .controls { display: flex; align-items: center; gap: 0.5rem; }
+        nav ul { display: flex; gap: 0.5rem; padding: 0; margin: 0; list-style: none; flex-wrap: wrap; }
+        nav a, #profile-btn {
+            color: var(--text-muted-color); text-decoration: none; padding: 0.5rem 0.8rem;
+            border-radius: var(--border-radius-md); transition: background-color var(--transition), color var(--transition);
+            background: none; border: none; cursor: pointer; font-size: 0.9rem; font-weight: 500;
+            font-family: inherit; display: inline-flex; align-items: center;
+        }
+        nav a:hover, #profile-btn:hover, nav a:focus, #profile-btn:focus {
+            background: var(--bg-color); color: var(--primary-color-light); outline: none; /* Ссылки в хедере всегда синие при наведении */
+        }
+        body.dark nav a:hover, body.dark #profile-btn:hover, body.dark nav a:focus, body.dark #profile-btn:focus {
+             background: var(--border-color); color: var(--primary-color); /* В темной теме - голубые */
+        }
+        .theme-switch { /* ... как в v4 ... */
+            background: none; border: none; color: var(--text-muted-color); font-size: 1.2rem; cursor: pointer;
+            padding: 0.5rem; border-radius: var(--border-radius-full); transition: background-color var(--transition), color var(--transition);
+            display: inline-flex; align-items: center; justify-content: center;
+        }
+        .theme-switch:hover, .theme-switch:focus { background: var(--bg-color); color: var(--primary-color-light); outline: none; }
+         body.dark .theme-switch:hover, body.dark .theme-switch:focus { background: var(--border-color); color: var(--primary-color); }
+
+
+        /* Секции */
+        section { padding: 2rem 1rem; max-width: 1280px; margin: 0 auto 1.5rem auto; }
+        h2 { text-align: center; font-size: 1.8rem; font-weight: 700; color: var(--primary-color-light); margin-bottom: 1.5rem; } /* Заголовки секций всегда синие */
+        body.dark h2 { color: var(--primary-color); } /* В темной теме - голубые */
+        h3 { color: var(--primary-color-light); margin-top: 1.5rem; margin-bottom: 1rem; font-size: 1.3rem; font-weight: 600; }
+        body.dark h3 { color: var(--primary-color); }
+        h4 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--text-color); }
+
+
+        /* Фильтры и Сортировка */
+        .filter-sort-container { /* ... как в v4 ... */
+            display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; align-items: center;
+            margin-bottom: 1.5rem; padding: 1rem; background-color: var(--card-bg);
+            border-radius: var(--border-radius-lg); border: 1px solid var(--border-color);
+        }
+        .filter-sort-container label { font-weight: 500; margin-right: 0.5rem; font-size: 0.9rem; color: var(--text-muted-color); display: inline-flex; align-items: center; }
+        .filter-sort-container select { /* ... как в v4 ... */
+            padding: 0.5rem 0.8rem; border-radius: var(--border-radius-md); border: 1px solid var(--border-color);
+            background: var(--card-bg); color: var(--text-color); font-size: 0.9rem; transition: var(--transition);
+            cursor: pointer; min-width: 150px;
+        }
+        .filter-sort-container select:focus { outline: none; border-color: var(--primary-color-light); box-shadow: 0 0 0 3px rgba(10, 74, 142, 0.2); }
+         body.dark .filter-sort-container select:focus { border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.3); }
+         .filter-sort-container button { margin-top: 0; padding: 0.5rem 0.8rem; font-size: 0.9rem; }
+         /* Кнопка сравнения */
+         #compare-unis-btn { background-color: var(--social-color); color: white; }
+         #compare-unis-btn:hover { background-color: #16a34a; } /* green-600 */
+         #compare-unis-btn:disabled { background-color: var(--border-color); color: var(--text-muted-color); }
+
+
+
+
+        /* Карточки (Общие стили) */
+        .uni-grid, .professions-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.2rem; padding: 0; }
+        .uni-card, .profession-card {
+            background: var(--card-bg); border-radius: var(--border-radius-lg); overflow: hidden;
+            transition: transform var(--transition), box-shadow var(--transition); box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color); position: relative; display: flex; flex-direction: column;
+        }
+        .uni-card { cursor: pointer; }
+        .uni-card:hover, .profession-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+
+
+        /* Чекбокс сравнения на карточке ВУЗа */
+        .uni-card .compare-checkbox-label {
+            position: absolute;
+            top: 0.5rem;
+            left: 0.5rem;
+            z-index: 10; /* Поверх иконки типа */
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: var(--border-radius-sm);
+            padding: 0.2rem 0.3rem;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity var(--transition);
+        }
+        .uni-card:hover .compare-checkbox-label { opacity: 1; }
+        body.dark .uni-card .compare-checkbox-label { background-color: rgba(30, 41, 59, 0.8); }
+        .uni-card .compare-checkbox-label input { margin-right: 0.3em; accent-color: var(--primary-color-light); }
+        body.dark .uni-card .compare-checkbox-label input { accent-color: var(--primary-color); }
+
+
+        /* Теги типов для профессий */
+        .profession-types { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-top: 0.8rem; }
+        .type-tag { font-size: 0.7rem; padding: 0.15rem 0.5rem; border-radius: var(--border-radius-full); color: white !important; font-weight: 500; line-height: 1.2; }
+
+
+        /* Карточки Вузов */
+        .uni-image { height: 160px; overflow: hidden; position: relative; background-color: var(--border-color); }
+        .uni-image img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease; }
+        .uni-card:hover .uni-image img { transform: scale(1.05); }
+        .uni-content { padding: 1rem; flex-grow: 1; display: flex; flex-direction: column; }
+        .uni-content h4 { margin: 0 0 0.4rem 0; font-size: 1rem; font-weight: 600; color: var(--text-color); line-height: 1.3; }
+        .uni-type-icon { position: absolute; top: 0.5rem; right: 0.5rem; background-color: rgba(255, 255, 255, 0.8); border-radius: var(--border-radius-full); padding: 0.3rem; box-shadow: var(--shadow-sm); color: var(--primary-color-light); font-size: 0.8rem; }
+         body.dark .uni-type-icon { background-color: rgba(30, 41, 59, 0.8); color: var(--primary-color); }
+         .uni-type-icon .icon { margin: 0; }
+        .preview-info { color: var(--text-muted-color); font-size: 0.8rem; margin-bottom: 0.6rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.4; flex-grow: 1; }
+        .uni-meta { display: flex; justify-content: space-between; gap: 0.5rem; margin-top: auto; padding-top: 0.6rem; align-items: center; flex-wrap: wrap; border-top: 1px solid var(--border-color); }
+        .uni-composite-score, .uni-avg-score { font-size: 0.75rem; font-weight: 500; color: var(--text-muted-color); }
+        .uni-composite-score strong, .uni-avg-score strong { font-weight: 700; color: var(--text-color); }
+
+
+        /* Карточки Профессий */
+        .profession-card { padding: 1rem; cursor: pointer; /* Делаем всю карточку кликабельной для фильтра вузов */ }
+        .profession-card h4 { margin: 0 0 0.4rem 0; font-size: 1rem; font-weight: 600; color: var(--text-color); line-height: 1.3; flex-grow: 0; }
+        .profession-card p { margin: 0 0 0.6rem 0; color: var(--text-muted-color); font-size: 0.85rem; flex-grow: 1; line-height: 1.4; }
+        .link-to-unis-btn { display: none; /* Скрываем кнопку, т.к. вся карточка кликабельна */ }
+
+
+        /* Кнопка "Показать еще" для профессий */
+        #show-more-professions-container { text-align: center; margin-top: 1.5rem; }
+        #show-more-professions-btn { background-color: var(--card-bg); color: var(--primary-color-light); border: 1px solid var(--primary-color-light); }
+         body.dark #show-more-professions-btn { color: var(--primary-color); border-color: var(--primary-color); }
+         #show-more-professions-btn:hover { background-color: var(--primary-color-light); color: var(--card-bg); opacity: 1; }
+         body.dark #show-more-professions-btn:hover { background-color: var(--primary-color); }
+
+
+        /* Поиск Профессий */
+         .search-filter-container { /* ... как в v4 ... */
+             display: flex; gap: 1rem; align-items: center; margin: 1.5rem 0; flex-wrap: wrap; justify-content: center;
+         }
+        #profession-search { /* ... как в v4 ... */
+            padding: 0.6rem 1rem; border-radius: var(--border-radius-md); border: 1px solid var(--border-color);
+            background: var(--card-bg); color: var(--text-color); font-size: 0.9rem; flex-grow: 1; max-width: 500px;
+            transition: var(--transition); box-shadow: var(--shadow-sm);
+        }
+         #reset-profession-filter-btn { /* ... как в v4 ... */
+             padding: 0.6rem 1rem; font-size: 0.9rem; margin-top: 0; background-color: var(--conventional-color); color: white;
+         }
+         #reset-profession-filter-btn.hidden { display: none; }
+         #profession-search:focus { outline: none; border-color: var(--primary-color-light); box-shadow: 0 0 0 3px rgba(10, 74, 142, 0.2); }
+         body.dark #profession-search:focus { border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.3); }
+
+
+        /* Модальные окна */
+        .modal { /* ... как в v4 ... */
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(5px); z-index: 2000;
+            animation: fadeIn 0.3s; overflow-y: auto; padding: 1rem;
+        }
+        body.dark .modal { background: rgba(0, 0, 0, 0.8); }
+        .modal-content { /* ... как в v4 ... */
+            background: var(--card-bg); max-width: 700px; margin: 3rem auto; padding: 1.5rem 2rem;
+            border-radius: var(--border-radius-lg); position: relative; animation: slideIn 0.3s ease-out;
+            box-shadow: var(--shadow-lg); border: 1px solid var(--border-color);
+        }
+        .modal-content h3 { margin: 0 0 1.5rem 0; color: var(--primary-color-light); font-size: 1.4rem; font-weight: 600; padding-right: 2rem; }
+        body.dark .modal-content h3 { color: var(--primary-color); }
+        .modal-content h4 { margin-top: 1.5rem; margin-bottom: 0.8rem; font-size: 1.1rem; font-weight: 600; color: var(--primary-color-light); border-bottom: 1px solid var(--border-color); padding-bottom: 0.4rem; }
+        body.dark .modal-content h4 { color: var(--primary-color); }
+        .modal .uni-image { width: 100%; height: 200px; object-fit: cover; border-radius: var(--border-radius-md); margin-bottom: 1.5rem; background-color: var(--border-color); }
+        .modal .uni-image img { width: 100%; height: 100%; object-fit: cover; border-radius: var(--border-radius-md); }
+        .uni-details p, .uni-rating-details li { margin-bottom: 0.6rem; font-size: 0.9rem; }
+        .uni-details strong, .uni-rating-details strong { color: var(--text-color); font-weight: 500; min-width: 160px; display: inline-block; }
+        .uni-rating-details ul { list-style: none; padding: 0; margin: 0; }
+        .uni-rating-details li { padding: 0.3rem 0; border-bottom: 1px dashed var(--border-color); }
+        .uni-rating-details li:last-child { border-bottom: none; }
+        #modal-professions-list { list-style: none; padding: 0; margin: 0; max-height: 180px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: var(--border-radius-md); padding: 0.5rem; background-color: var(--bg-color); }
+        #modal-professions-list li { padding: 0.4rem 0.8rem; border-bottom: 1px dashed var(--border-color); font-size: 0.85rem; }
+        #modal-professions-list li:last-child { border-bottom: none; }
+        #modal-professions-list li:hover { background-color: var(--border-color); }
+        #modal-professions-list .no-professions { font-style: italic; opacity: 0.7; padding: 1rem; text-align: center; }
+        .close { position: absolute; top: 1rem; right: 1rem; font-size: 1.5rem; font-weight: normal; cursor: pointer; color: var(--text-muted-color); transition: color 0.2s; background: none; border: none; padding: 0.5rem; line-height: 1; border-radius: var(--border-radius-full); }
+        .close:hover { color: var(--text-color); background-color: var(--bg-color); }
+         body.dark .close:hover { background-color: var(--border-color); }
+
+
+        /* Модальное окно Сравнения */
+        #compare-modal table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            font-size: 0.85rem;
+        }
+        #compare-modal th, #compare-modal td {
+            border: 1px solid var(--border-color);
+            padding: 0.6rem 0.8rem;
+            text-align: left;
+            vertical-align: top;
+        }
+        #compare-modal th {
+            background-color: var(--bg-color);
+            font-weight: 600;
+            color: var(--primary-color-light);
+        }
+        body.dark #compare-modal th { color: var(--primary-color); }
+        #compare-modal td ul { /* Список программ в таблице */
+             list-style: disc;
+             margin: 0;
+             padding-left: 1.2rem;
+        }
+        #compare-modal td ul li { margin-bottom: 0.2rem; }
+
+
+        /* Стили для теста */
+        #career-test { background: var(--card-bg); padding: 2rem; border-radius: var(--border-radius-lg); box-shadow: var(--shadow); border: 1px solid var(--border-color); }
+        /* ... остальные стили теста как в v4 ... */
+        .question { margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border-color); }
+        .question:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+        .question p { font-weight: 500; margin-bottom: 1rem; font-size: 1.05rem; }
+        .options fieldset { border: none; padding: 0; margin: 0; }
+        .options legend { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border-width: 0; }
+        .options label { display: block; margin-bottom: 0.6rem; padding: 0.8rem 1rem; background-color: var(--bg-color); border-radius: var(--border-radius-md); cursor: pointer; transition: var(--transition); border: 1px solid var(--border-color); font-size: 0.9rem; }
+        .options label:hover { border-color: var(--primary-color-light); background-color: var(--card-bg); }
+         body.dark .options label { background-color: var(--card-bg); }
+         body.dark .options label:hover { border-color: var(--primary-color); }
+         .options label:active { transform: scale(0.98); }
+        .options input[type="radio"] { margin-right: 0.6rem; accent-color: var(--primary-color-light); }
+         body.dark .options input[type="radio"] { accent-color: var(--primary-color); }
+
+
+        /* Стили для результатов теста */
+         #results { background: var(--card-bg); padding: 2rem; border-radius: var(--border-radius-lg); text-align: center; border: 1px solid var(--border-color); }
+         #result-text h3 { color: var(--primary-color-light); margin-bottom: 0.8rem; font-size: 1.3rem; }
+         body.dark #result-text h3 { color: var(--primary-color); }
+         #result-text p { margin-bottom: 1rem; font-size: 1rem; max-width: 700px; margin-left: auto; margin-right: auto; color: var(--text-muted-color); }
+         #result-explanation { /* Пояснение к результатам */
+             font-size: 0.9rem;
+             color: var(--text-muted-color);
+             margin-top: -0.5rem;
+             margin-bottom: 1.5rem;
+             max-width: 600px;
+             margin-left: auto;
+             margin-right: auto;
+         }
+         #result-types { display: flex; justify-content: center; gap: 0.6rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+         #result-types .type-tag { font-size: 0.9rem; padding: 0.3rem 0.8rem; }
+         #results #show-matching-professions-btn { margin: 1rem 0.5rem 0 0; }
+         #results #save-result-btn { margin: 1rem 0 0 0.5rem; background-color: var(--card-bg); color: var(--primary-color-light); border: 1px solid var(--primary-color-light); }
+         body.dark #results #save-result-btn { color: var(--primary-color); border-color: var(--primary-color); }
+          #results #save-result-btn:hover { background-color: var(--primary-color-light); color: var(--card-bg); opacity: 1; }
+          body.dark #results #save-result-btn:hover { background-color: var(--primary-color); }
+          #top-matching-professions { margin-top: 1.5rem; text-align: left; }
+          #top-matching-professions h4 { font-size: 1rem; margin-bottom: 0.5rem; text-align: center; color: var(--text-muted-color);}
+          #top-matching-professions ul { list-style: none; padding: 0; margin: 0 auto; max-width: 400px; }
+          #top-matching-professions li { background-color: var(--bg-color); padding: 0.5rem 1rem; border-radius: var(--border-radius-md); margin-bottom: 0.5rem; border: 1px solid var(--border-color); font-size: 0.9rem; text-align: center; }
+
+
+        /* Профиль пользователя */
+        #profile-modal h4 { margin-top: 1.5rem; margin-bottom: 0.8rem; font-size: 1.1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.4rem; }
+        /* ... остальные стили профиля как в v4 ... */
+        #saved-results div, #favorites div { background: var(--bg-color); padding: 0.6rem 1rem; border-radius: var(--border-radius-md); margin-bottom: 0.5rem; display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; border: 1px solid var(--border-color); }
+        #saved-results div span, #favorites div span { flex-grow: 1; margin-right: 1rem; color: var(--text-muted-color); }
+        #saved-results div span strong, #favorites div span strong { color: var(--text-color); font-weight: 500;}
+        #saved-results div button, #favorites div button { background: none; border: none; color: var(--realistic-color); cursor: pointer; font-size: 1.1rem; padding: 0.2rem; line-height: 1; margin-top: 0; opacity: 0.7; transition: opacity var(--transition); }
+        #saved-results div button:hover, #favorites div button:hover { opacity: 1; transform: none; box-shadow: none; }
+        #saved-results p, #favorites p { font-style: italic; opacity: 0.7; background: none; padding: 0; font-size: 0.9rem; text-align: center; }
+        #clear-profile-btn { background-color: var(--realistic-color) !important; color: white !important; width: 100%; }
+         #clear-profile-btn:hover { background-color: #dc2626 !important; opacity: 1 !important; }
+
+
+        /* Кнопки */
+        button, input[type="submit"] { /* ... как в v4 ... */
+            background: var(--accent-color); color: var(--primary-color-light); border: none; padding: 0.6rem 1.2rem;
+            border-radius: var(--border-radius-md); cursor: pointer; font-weight: 600; font-size: 0.9rem;
+            transition: var(--transition); display: inline-flex; align-items: center; justify-content: center;
+            margin-top: 1rem; text-align: center; box-shadow: var(--shadow-sm); border: 1px solid transparent;
+        }
+        button:hover, input[type="submit"]:hover {
+            opacity: 1; background-color: var(--accent-color-darker); transform: translateY(-2px); box-shadow: var(--shadow);
+        }
+        button:focus, input[type="submit"]:focus { outline: none; box-shadow: 0 0 0 3px rgba(250, 204, 21, 0.4); }
+        button:disabled { opacity: 0.6; cursor: not-allowed; transform: none; box-shadow: none; background-color: var(--border-color) !important; color: var(--text-muted-color) !important; border-color: transparent !important;}
+        button .icon { margin-bottom: 0; }
+
+
+        /* Уведомления (Toast) */
+        .toast { /* ... как в v4 ... */
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(150%);
+            background: #2c3e50; /* Темно-серый синий для уведомлений */ color: white; padding: 0.8rem 1.5rem;
+            border-radius: var(--border-radius-md); box-shadow: var(--shadow-lg);
+            transition: transform 0.4s ease-out, opacity 0.4s ease-out; z-index: 3000;
+            opacity: 0; pointer-events: none; font-size: 0.9rem;
+        }
+        body.dark .toast { background: var(--accent-color); color: #333; }
+        .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+
+        /* Футер */
+        footer { /* ... как в v4 ... */
+            background: var(--card-bg); color: var(--text-muted-color); text-align: center; padding: 1rem;
+            position: fixed; bottom: 0; width: 100%; font-size: 0.85rem; z-index: 900;
+            transition: var(--transition); border-top: 1px solid var(--border-color);
+        }
+
+
+        /* Адаптивность */
+        @media (max-width: 768px) { /* ... как в v4 ... */
+             body { padding-top: 120px; } h2 { font-size: 1.6rem; } h3 { font-size: 1.2rem; }
+             .header-content { flex-direction: column; align-items: flex-start; }
+             nav ul { gap: 0.3rem; margin-top: 0.5rem; }
+             nav a, #profile-btn { padding: 0.4rem 0.6rem; font-size: 0.85rem; }
+             .uni-grid, .professions-grid { grid-template-columns: 1fr; }
+             .modal-content { width: 95%; padding: 1.5rem; margin: 2rem auto; }
+             #profession-search { max-width: none; width: 100%; margin-bottom: 0.5rem; }
+             .search-filter-container { justify-content: flex-start; }
+             #reset-profession-filter-btn, #reset-uni-filter-btn { width: auto; }
+             .filter-sort-container { flex-direction: column; align-items: stretch; }
+             .filter-sort-container label { margin-bottom: 0.5rem; text-align: left; }
+             .filter-sort-container select { width: 100%; }
+             button, input[type="submit"] { padding: 0.8rem 1.2rem; font-size: 0.9rem; }
+             #career-test button[type="submit"] { width: 100%; }
+             #start-test-btn { width: auto; display: block; margin: 1rem auto; }
+             .modal-content button { width: auto; margin-bottom: 0.5rem; }
+             #clear-profile-btn { width: 100%; }
+             #compare-modal table { font-size: 0.75rem; } /* Мельче шрифт в таблице сравнения */
+             #compare-modal th, #compare-modal td { padding: 0.4rem 0.5rem; }
+        }
+        @media (max-width: 480px) { /* ... как в v4 ... */
+             body { padding-top: 110px; font-size: 15px; }
+             h2 { font-size: 1.4rem; } h3 { font-size: 1.1rem; }
+             .logo { font-size: 1.3rem; }
+             .uni-image { height: 140px; }
+             .uni-meta { flex-direction: column; align-items: flex-start; gap: 0.3rem; }
+             .uni-composite-score, .uni-avg-score { font-size: 0.7rem; }
+             .options label { padding: 0.6rem 0.8rem; font-size: 0.85rem; }
+             .modal-content { padding: 1rem; }
+             .close { top: 0.5rem; right: 0.5rem; font-size: 1.5rem; padding: 0.3rem;}
+             .profession-card { padding: 0.8rem; }
+             .profession-card h4 { font-size: 0.9rem; }
+             .profession-card p { font-size: 0.8rem; }
+             .type-tag { font-size: 0.65rem; padding: 0.1rem 0.4rem;}
+             .uni-details strong { min-width: auto; display: block; margin-bottom: 0.1rem; }
+             .uni-details p, .uni-rating-details li { font-size: 0.85rem; }
+             #modal-professions-list li { font-size: 0.8rem; padding: 0.3rem 0.6rem; }
+             button, input[type="submit"] { padding: 0.7rem 1rem; font-size: 0.85rem; }
+             #results #show-matching-professions-btn, #results #save-result-btn { font-size: 0.85rem; padding: 0.7rem 1rem; }
+             #compare-modal table { font-size: 0.7rem; }
+             #compare-modal th, #compare-modal td { padding: 0.3rem 0.4rem; }
+        }
+
+
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">UniHub</div>
+            <div class="controls">
+                <nav>
+                    <ul>
+                        <li><a href="#test"><i class="icon" data-lucide="clipboard-check"></i>Тест</a></li>
+                        <li><a href="#professions"><i class="icon" data-lucide="briefcase"></i>Профессии</a></li>
+                        <li><a href="#universities"><i class="icon" data-lucide="graduation-cap"></i>Вузы</a></li>
+                        <li><button type="button" id="profile-btn"><i class="icon" data-lucide="user"></i>Профиль</button></li>
+                    </ul>
+                </nav>
+                <button type="button" class="theme-switch" title="Переключить тему">
+                    <i class="icon icon-only" data-lucide="moon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+
+    <section id="test">
+        <h2><i class="icon icon-lg" data-lucide="clipboard-check"></i>Профориентационный тест</h2>
+        <div id="test-start" style="text-align: center;">
+            <p style="margin-bottom: 1.5rem; color: var(--text-muted-color);">Этот тест поможет определить ваши склонности и интересы, чтобы подобрать подходящие профессии. Отвечайте честно, выбирая то, что вам ближе.</p>
+            <button type="button" id="start-test-btn"><i class="icon" data-lucide="play"></i>Начать тест</button>
+        </div>
+        <form id="career-test" class="hidden">
+            <div id="questions-container"></div>
+            <button type="submit"><i class="icon" data-lucide="check-circle"></i>Узнать результат</button>
+        </form>
+    </section>
+
+
+    <section id="results" class="hidden">
+        <h2><i class="icon icon-lg" data-lucide="award"></i>Результаты теста</h2>
+        <div id="result-text"></div>
+        <div id="result-types"></div>
+        <div id="result-explanation"></div> <div id="top-matching-professions" class="hidden">
+            <h4>Наиболее подходящие профессии:</h4>
+            <ul></ul>
+        </div>
+        <div style="margin-top: 1.5rem;">
+            <button type="button" id="show-matching-professions-btn"><i class="icon" data-lucide="list-filter"></i>Показать все подходящие профессии</button>
+            <button type="button" id="save-result-btn"><i class="icon" data-lucide="save"></i>Сохранить результат</button>
+        </div>
+    </section>
+
+
+    <section id="professions">
+        <h2><i class="icon icon-lg" data-lucide="briefcase"></i>Профессии</h2>
+        <div class="search-filter-container">
+            <input type="text" id="profession-search" placeholder="Поиск по названию, описанию или типу...">
+            <button type="button" id="reset-profession-filter-btn" class="hidden" title="Сбросить фильтр и поиск">
+                <i class="icon icon-only" data-lucide="rotate-ccw"></i>
+            </button>
+        </div>
+        <div class="professions-grid" id="professions-list"></div>
+        <div id="show-more-professions-container" class="hidden">
+             <button type="button" id="show-more-professions-btn"><i class="icon" data-lucide="chevron-down"></i>Показать еще</button>
+        </div>
+    </section>
+
+
+    <section id="universities">
+        <h2><i class="icon icon-lg" data-lucide="graduation-cap"></i>Вузы Москвы</h2>
+        <div class="filter-sort-container">
+             <div>
+                <label for="uni-filter"><i class="icon icon-sm" data-lucide="filter"></i>Направление:</label>
+                <select id="uni-filter"> <option value="all">Все направления</option> </select>
+             </div>
+             <div>
+                <label for="uni-sort"><i class="icon icon-sm" data-lucide="arrow-up-down"></i>Сортировать:</label>
+                <select id="uni-sort">
+                    <option value="compositeScore">Комплексный балл</option>
+                    <option value="avgScore">Балл ЕГЭ</option>
+                    <option value="budgetPlaces">Бюджетные места</option>
+                    <option value="reputation">Репутация</option>
+                    <option value="name">Название (А-Я)</option>
+                </select>
+             </div>
+             <button type="button" id="compare-unis-btn" class="hidden" title="Сравнить выбранные ВУЗы">
+                 <i class="icon" data-lucide="git-compare"></i>Сравнить (<span id="compare-count">0</span>)
+             </button>
+             <button type="button" id="reset-uni-filter-btn" title="Сбросить фильтр и сортировку">
+                 <i class="icon icon-only" data-lucide="rotate-ccw"></i>
+             </button>
+        </div>
+        <div class="uni-grid" id="all-unis-list"></div>
+    </section>
+
+
+    <div class="modal" id="uni-modal">
+        <div class="modal-content">
+            <button class="close" title="Закрыть"><i class="icon icon-only" data-lucide="x"></i></button>
+            <h3 id="uni-modal-title">Название ВУЗа</h3>
+             <div class="uni-image"> <img id="uni-modal-image" src="" alt=""> </div>
+             <h4><i class="icon" data-lucide="info"></i>Описание</h4>
+             <div class="uni-details"> <p id="uni-info"></p> </div>
+             <h4><i class="icon" data-lucide="book-marked"></i>Основные направления</h4>
+              <div class="uni-details"> <p><span id="uni-programs"></span></p> </div>
+             <h4><i class="icon" data-lucide="bar-chart-3"></i>Ключевые показатели (примерные)</h4>
+             <div class="uni-rating-details">
+                 <ul>
+                     <li><strong><i class="icon icon-sm" data-lucide="award"></i>Средний балл ЕГЭ (бюджет):</strong> <span id="uni-avg-score"></span></li>
+                     <li><strong><i class="icon icon-sm" data-lucide="users"></i>Бюджетных мест:</strong> <span id="uni-budget"></span></li>
+                     <li><strong><i class="icon icon-sm" data-lucide="briefcase"></i>Трудоустройство (%):</strong> <span id="uni-employment"></span>%</li>
+                     <li><strong><i class="icon icon-sm" data-lucide="star"></i>Репутация (условно):</strong> <span id="uni-reputation"></span>/10</li>
+                     <li><strong><i class="icon icon-sm" data-lucide="trending-up"></i>Комплексный балл:</strong> <span id="uni-composite-score-modal"></span></li>
+                 </ul>
+             </div>
+             <h4><i class="icon" data-lucide="link"></i>Подходящие профессии</h4>
+             <ul id="modal-professions-list"> <li class="no-professions">Анализ...</li> </ul>
+             <div style="margin-top: 2rem; text-align: right;">
+                <button type="button" id="add-to-favorites-btn"><i class="icon" data-lucide="heart"></i> В избранное</button>
+             </div>
+        </div>
+    </div>
+
+
+    <div class="modal" id="profile-modal">
+         <div class="modal-content">
+            <button class="close" title="Закрыть"><i class="icon icon-only" data-lucide="x"></i></button>
+            <h3><i class="icon" data-lucide="user"></i>Мой профиль</h3>
+            <h4><i class="icon" data-lucide="clipboard-check"></i>Сохраненные результаты теста</h4>
+            <div id="saved-results"> <p>Загрузка...</p> </div>
+            <h4><i class="icon" data-lucide="heart"></i>Избранные ВУЗы</h4>
+            <div id="favorites"> <p>Загрузка...</p> </div>
+             <button type="button" id="clear-profile-btn"><i class="icon" data-lucide="trash-2"></i>Очистить профиль</button>
+        </div>
+    </div>
+
+
+    <div class="modal" id="compare-modal">
+         <div class="modal-content">
+            <button class="close" title="Закрыть"><i class="icon icon-only" data-lucide="x"></i></button>
+            <h3><i class="icon" data-lucide="git-compare"></i>Сравнение ВУЗов</h3>
+            <div id="compare-table-container" style="overflow-x: auto;">
+                <p>Выберите от 2 до 3 вузов для сравнения.</p>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <footer> <p>© <span id="current-year">2025</span> UniHub. Все права защищены.</p> </footer>
+
+
+    <div id="toast" class="toast">Сообщение</div>
+
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        // --- JavaScript Код (v5) ---
+
+
+        // --- ДАННЫЕ ---
+        const HOLLAND_TYPES = { REALISTIC: 'realistic', INVESTIGATIVE: 'investigative', ARTISTIC: 'artistic', SOCIAL: 'social', ENTERPRISING: 'enterprising', CONVENTIONAL: 'conventional' };
+        const TYPE_DESCRIPTIONS = { /* ... */
+            [HOLLAND_TYPES.REALISTIC]: { name: "Реалистичный", description: "Вам нравится работать руками, с инструментами, техникой, животными или растениями. Вы цените практичность и конкретные результаты.", explanation: "Это указывает на склонность к инженерным, техническим, природным или ремесленным областям." },
+            [HOLLAND_TYPES.INVESTIGATIVE]: { name: "Исследовательский", description: "Вас привлекает анализ информации, решение сложных задач, научные исследования. Вы любознательны и любите разбираться в сути вещей.", explanation: "Это говорит об интересе к научной, аналитической, медицинской или IT-деятельности, где важен поиск знаний." },
+            [HOLLAND_TYPES.ARTISTIC]: { name: "Артистический", description: "Вам нравится творческое самовыражение через искусство, музыку, дизайн, литературу. Вы цените оригинальность и эстетику.", explanation: "Это указывает на ваш творческий потенциал и интерес к сферам дизайна, искусства, медиа и гуманитарных наук." },
+            [HOLLAND_TYPES.SOCIAL]: { name: "Социальный", description: "Вы любите работать с людьми, помогать, обучать, консультировать. Вам важны общение и взаимопонимание.", explanation: "Это говорит о вашей ориентации на помощь людям, что важно в педагогике, медицине, психологии и социальной работе." },
+            [HOLLAND_TYPES.ENTERPRISING]: { name: "Предприимчивый", description: "Вас привлекает возможность руководить, убеждать, организовывать проекты, влиять на людей. Вы амбициозны и инициативны.", explanation: "Это указывает на лидерские качества и интерес к бизнесу, управлению, продажам, юриспруденции и политике." },
+            [HOLLAND_TYPES.CONVENTIONAL]: { name: "Конвенциональный", description: "Вам нравится работать с информацией, данными, документами, следовать инструкциям. Вы цените порядок, точность и системность.", explanation: "Это говорит о вашей склонности к работе, требующей внимательности и организованности, например, в финансах, администрировании, IT (данные)." }
+         };
+        const UNI_TYPE_ICONS = { /* ... как в v4 ... */
+            science: 'flask-conical', tech: 'cpu', engineering: 'wrench', international: 'globe-2',
+            economics: 'trending-up', medical: 'stethoscope', management: 'users', art: 'palette',
+            law: 'scale', humanities: 'book-open', education: 'graduation-cap', social: 'heart-handshake',
+            default: 'building-2'
+        };
+        const professions = [ /* ... как в v4 ... */
+            { name: "Адвокат", description: "Защищает права клиентов в суде. Составляет юридические документы.", types: [HOLLAND_TYPES.ENTERPRISING, HOLLAND_TYPES.SOCIAL, HOLLAND_TYPES.INVESTIGATIVE] },
+            { name: "Агроном", description: "Разрабатывает технологии выращивания с/х культур. Контролирует качество урожая.", types: [HOLLAND_TYPES.REALISTIC, HOLLAND_TYPES.INVESTIGATIVE] },
+            { name: "Актёр", description: "Играет роли в театре и кино. Перевоплощается в разных персонажей.", types: [HOLLAND_TYPES.ARTISTIC, HOLLAND_TYPES.SOCIAL] },
+            { name: "Аналитик", description: "Исследует данные и тенденции. Готовит отчеты и рекомендации.", types: [HOLLAND_TYPES.INVESTIGATIVE, HOLLAND_TYPES.CONVENTIONAL, HOLLAND_TYPES.ENTERPRISING] },
+            { name: "Архитектор", description: "Проектирует здания и сооружения. Разрабатывает планировку и дизайн.", types: [HOLLAND_TYPES.ARTISTIC, HOLLAND_TYPES.REALISTIC, HOLLAND_TYPES.INVESTIGATIVE] },
+            { name: "Астроном", description: "Изучает космические объекты и явления. Проводит наблюдения и расчеты.", types: [HOLLAND_TYPES.INVESTIGATIVE] },
+            { name: "Банкир", description: "Работает в финансовой сфере. Управляет денежными потоками и инвестициями.", types: [HOLLAND_TYPES.ENTERPRISING, HOLLAND_TYPES.CONVENTIONAL] },
+            { name: "Биолог", description: "Исследует живые организмы. Проводит эксперименты и анализирует данные.", types: [HOLLAND_TYPES.INVESTIGATIVE, HOLLAND_TYPES.REALISTIC] },
+            { name: "Бухгалтер", description: "Ведет финансовый учет. Составляет отчеты и рассчитывает налоги.", types: [HOLLAND_TYPES.CONVENTIONAL, HOLLAND_TYPES.ENTERPRISING] },
+            { name: "Ветеринар", description: "Лечит животных. Проводит осмотры и операции.", types: [HOLLAND_TYPES.REALISTIC, HOLLAND_TYPES.INVESTIGATIVE, HOLLAND_TYPES.SOCIAL] },
+            { name: "Воспитатель", description: "Работает с детьми в ДОУ. Организует игры и занятия.", types: [HOLLAND_TYPES.SOCIAL, HOLLAND_TYPES.ARTISTIC] },
+            { name: "Врач", description: "Диагностирует и лечит заболевания. Проводит обследования и назначает лечение.", types: [HOLLAND_TYPES.INVESTIGATIVE, HOLLAND_TYPES.SOCIAL, HOLLAND_TYPES.REALISTIC] },
+            { name: "Геолог", description: "Изучает состав и строение Земли. Проводит полевые исследования.", types: [HOLLAND_TYPES.INVESTIGATIVE, HOLLAND_TYPES.REALISTIC] },
+            { name: "Графический дизайнер", description: "Создает визуальные решения. Работает с графикой и макетами.", types: [HOLLAND_TYPES.ARTISTIC, HOLLAND_TYPES.REALISTIC] },
+            { name: "Дантист / Стоматолог", description: "Специализируется на лечении зубов. Ставит пломбы и протезы.", types: [HOLLAND_TYPES.REALISTIC, HOLLAND_TYPES.INVESTIGATIVE, HOLLAND_TYPES.SOCIAL] },
+            { name: "Декоратор", description: "Оформляет интерьеры. Подбирает мебель и аксессуары.", types: [HOLLAND_TYPES.ARTISTIC, HOLLAND_TYPES.REALISTIC, HOLLAND_TYPES.ENTERPRISING] },
+            { name: "Дизайнер", description: "Разрабатывает внешний вид продуктов, интерфейсов, одежды. Создает эскизы и концепции.", types: [HOLLAND_TYPES.ARTISTIC, HOLLAND_TYPES.REALISTIC] },
+            { name: "Журналист", description: "Пишет статьи и репортажи. Берет интервью и анализирует события.", types: [HOLLAND_TYPES.ARTISTIC, HOLLAND_TYPES.SOCIAL, HOLLAND_TYPES.ENTERPRISING, HOLLAND_TYPES.INVESTIGATIVE] },
+            { name: "Зоолог", description: "Изучает животных и их поведение. Проводит исследования в природе.", types: [HOLLAND_TYPES.INVESTIGATIVE, HOLLAND_TYPES.REALISTIC] },
+            { name: "Инженер", description: "Разрабатывает технические решения. Проектирует оборудование и системы.", types: [HOLLAND_TYPES.REALISTIC, HOLLAND_TYPES.INVESTIGATIVE] },
+            { name: "Историк", description: "Изучает прошлое человечества по источникам.", types: [HOLLAND_TYPES.INVESTIGATIVE, HOLLAND_TYPES.ARTISTIC]},
+            { name: "Ландшафтный дизайнер", description: "Создает проекты садов и парков. Подбирает растения и элементы.", types: [HOLLAND_TYPES.ARTISTIC, HOLLAND_TYPES.REALISTIC] },
+            { name: "Лингвист", description: "Изучает языки, их структуру и функционирование.", types: [HOLLAND_TYPES.INVESTIGATIVE, HOLLAND_TYPES.ARTISTIC]},
+            { name: "Логист", description: "Организует перевозки грузов. Оптимизирует транспортные маршруты.", types: [HOLLAND_TYPES.ENTERPRISING, HOLLAND_TYPES.CONVENTIONAL, HOLLAND_TYPES.REALISTIC] },
+            { name: "Маркетолог", description: "Исследует рынок, продвигает товары и услуги.", types: [HOLLAND_TYPES.ENTERPRISING, HOLLAND_TYPES.SOCIAL, HOLLAND_TYPES.INVESTIGATIVE]},
+            { name: "Математик", description: "Занимается математическими исследованиями и разработками.", types: [HOLLAND_TYPES.INVESTIGATIVE]},
+            { name: "Медсестра / Медбрат (с ВО)", description: "Организует сестринский уход, выполняет врачебные назначения, управляет сестринским персоналом.", types: [HOLLAND_TYPES.SOCIAL, HOLLAND_TYPES.REALISTIC, HOLLAND_TYPES.CONVENTIONAL] },
+            { name: "Менеджер", description: "Управляет процессами или персоналом в компании. Организует работу.", types: [HOLLAND_TYPES.ENTERPRISING, HOLLAND_TYPES.SOCIAL, HOLLAND_TYPES.CONVENTIONAL] },
+            { name: "Метролог", description: "Контролирует точность измерений. Проверяет приборы и оборудование.", types: [HOLLAND_TYPES.INVESTIGATIVE, HOLLAND_TYPES.CONVENTIONAL, HOLLAND_TYPES.REALISTIC] },
+            { name: "Музыкант", description: "Исполняет или создает музыку. Выступает на концертах и записях.", types: [HOLLAND_TYPES.ARTISTIC] },
+            { name: "Налоговый инспектор", description: "Проверяет правильность уплаты налогов. Контролирует отчетность.", types: [HOLLAND_TYPES.CONVENTIONAL, HOLLAND_TYPES.INVESTIGATIVE, HOLLAND_TYPES.ENTERPRISING] },
+            { name: "Нотариус", description: "Заверяет документы и сделки. Обеспечивает юридическую чистоту.", types: [HOLLAND_TYPES.CONVENTIONAL, HOLLAND_TYPES.SOCIAL, HOLLAND_TYPES.ENTERPRISING] },
+            { name: "Орнитолог", description: "Изучает птиц. Наблюдает за их поведением и миграцией.", types: [HOLLAND_TYPES.INVESTIGATIVE, HOLLAND_TYPES.REALISTIC] },
+            { name: "Патологоанатом", description: "Исследует ткани и органы для диагностики заболеваний, устанавливает причины смерти.", types: [HOLLAND_TYPES.INVESTIGATIVE, HOLLAND_TYPES.REALISTIC] },
+            { name: "Педагог", description: "Обучает детей или взрослых. Разрабатывает программы и проводит занятия.", types: [HOLLAND_TYPES.SOCIAL, HOLLAND_TYPES.ARTISTIC, HOLLAND_TYPES.INVESTIGATIVE] },
+            { name: "Переводчик", description: "Переводит тексты и речь. Работает с разными языками.", types: [HOLLAND_TYPES.ARTISTIC, HOLLAND_TYPES.SOCIAL, HOLLAND_TYPES.INVESTIGATIVE, HOLLAND_TYPES.CONVENTIONAL] },
+            { name: "Пилот", description: "Управляет летательными аппаратами. Отвечает за безопасность полетов.", types: [HOLLAND_TYPES.REALISTIC, HOLLAND_TYPES.CONVENTIONAL] },
+            { name: "Писатель", description: "Создает книги, рассказы или сценарии. Делится идеями через тексты.", types: [HOLLAND_TYPES.ARTISTIC, HOLLAND_TYPES.INVESTIGATIVE] },
+            { name: "Полицейский (офицер)", description: "Обеспечивает правопорядок. Расследует преступления.", types: [HOLLAND_TYPES.SOCIAL, HOLLAND_TYPES.REALISTIC, HOLLAND_TYPES.ENTERPRISING] },
+            { name: "Политолог", description: "Изучает политические системы, процессы, международные отношения.", types: [HOLLAND_TYPES.INVESTIGATIVE, HOLLAND_TYPES.SOCIAL, HOLLAND_TYPES.ENTERPRISING]},
+            { name: "Программист", description: "Пишет код для программ и приложений. Разрабатывает цифровые решения.", types: [HOLLAND_TYPES.INVESTIGATIVE, HOLLAND_TYPES.REALISTIC, HOLLAND_TYPES.CONVENTIONAL] },
+            { name: "Продюсер", description: "Организует творческие проекты. Контролирует бюджет и производство.", types: [HOLLAND_TYPES.ENTERPRISING, HOLLAND_TYPES.ARTISTIC, HOLLAND_TYPES.SOCIAL] },
+            { name: "Психолог", description: "Помогает людям справляться с эмоциями. Проводит консультации и терапию.", types: [HOLLAND_TYPES.SOCIAL, HOLLAND_TYPES.INVESTIGATIVE] },
+            { name: "Редактор", description: "Проверяет и корректирует тексты. Контролирует качество контента.", types: [HOLLAND_TYPES.CONVENTIONAL, HOLLAND_TYPES.ARTISTIC, HOLLAND_TYPES.INVESTIGATIVE] },
+            { name: "Режиссер", description: "Руководит созданием фильмов или спектаклей. Организует работу актеров и команды.", types: [HOLLAND_TYPES.ARTISTIC, HOLLAND_TYPES.ENTERPRISING, HOLLAND_TYPES.SOCIAL] },
+            { name: "Рекрутер / HR-специалист", description: "Подбирает персонал. Проводит собеседования и оценивает кандидатов.", types: [HOLLAND_TYPES.SOCIAL, HOLLAND_TYPES.ENTERPRISING] },
+            { name: "Реставратор", description: "Восстанавливает старинные предметы. Сохраняет культурное наследие.", types: [HOLLAND_TYPES.ARTISTIC, HOLLAND_TYPES.REALISTIC, HOLLAND_TYPES.INVESTIGATIVE] },
+            { name: "Социолог", description: "Исследует общество. Проводит опросы и анализирует данные.", types: [HOLLAND_TYPES.INVESTIGATIVE, HOLLAND_TYPES.SOCIAL] },
+            { name: "Судья", description: "Рассматривает дела в суде. Выносит решения и приговоры.", types: [HOLLAND_TYPES.SOCIAL, HOLLAND_TYPES.INVESTIGATIVE, HOLLAND_TYPES.CONVENTIONAL] },
+            { name: "Терапевт", description: "Диагностирует и лечит внутренние болезни. Назначает анализы и лекарства.", types: [HOLLAND_TYPES.INVESTIGATIVE, HOLLAND_TYPES.SOCIAL] },
+            { name: "Тестировщик ПО (с ВО)", description: "Разрабатывает стратегии и автоматизирует тестирование ПО. Анализирует качество.", types: [HOLLAND_TYPES.INVESTIGATIVE, HOLLAND_TYPES.CONVENTIONAL, HOLLAND_TYPES.REALISTIC] },
+            { name: "Тренер (высшее спорт. образование)", description: "Разрабатывает методики, готовит спортсменов высокого уровня.", types: [HOLLAND_TYPES.SOCIAL, HOLLAND_TYPES.REALISTIC, HOLLAND_TYPES.ENTERPRISING] },
+            { name: "Учитель", description: "Преподает предметы в школе. Помогает ученикам усваивать знания.", types: [HOLLAND_TYPES.SOCIAL, HOLLAND_TYPES.ARTISTIC, HOLLAND_TYPES.INVESTIGATIVE] },
+            { name: "Фармацевт / Провизор", description: "Работает с лекарственными средствами, консультирует по их применению.", types: [HOLLAND_TYPES.INVESTIGATIVE, HOLLAND_TYPES.CONVENTIONAL, HOLLAND_TYPES.SOCIAL, HOLLAND_TYPES.REALISTIC] },
+            { name: "Физик", description: "Исследует физические явления и законы природы. Проводит эксперименты и расчеты.", types: [HOLLAND_TYPES.INVESTIGATIVE] },
+            { name: "Филолог", description: "Изучает язык и литературу, тексты культуры.", types: [HOLLAND_TYPES.INVESTIGATIVE, HOLLAND_TYPES.ARTISTIC]},
+            { name: "Финансист", description: "Управляет денежными средствами. Анализирует инвестиции и риски.", types: [HOLLAND_TYPES.ENTERPRISING, HOLLAND_TYPES.CONVENTIONAL, HOLLAND_TYPES.INVESTIGATIVE] },
+            { name: "Фотограф (профессиональный)", description: "Создает художественные и коммерческие фотографии. Владеет техникой и композицией.", types: [HOLLAND_TYPES.ARTISTIC, HOLLAND_TYPES.REALISTIC, HOLLAND_TYPES.ENTERPRISING] },
+            { name: "Химик", description: "Изучает свойства веществ и реакции. Работает в лабораториях или промышленности.", types: [HOLLAND_TYPES.INVESTIGATIVE, HOLLAND_TYPES.REALISTIC] },
+            { name: "Хирург", description: "Проводит операции на органах. Лечит сложные заболевания хирургическим путем.", types: [HOLLAND_TYPES.REALISTIC, HOLLAND_TYPES.INVESTIGATIVE, HOLLAND_TYPES.SOCIAL] },
+            { name: "Хореограф", description: "Ставит танцевальные номера. Обучает движениям и ритму.", types: [HOLLAND_TYPES.ARTISTIC, HOLLAND_TYPES.SOCIAL, HOLLAND_TYPES.REALISTIC] },
+            { name: "Эколог", description: "Защищает окружающую среду. Исследует экосистемы и борется с загрязнением.", types: [HOLLAND_TYPES.INVESTIGATIVE, HOLLAND_TYPES.REALISTIC, HOLLAND_TYPES.SOCIAL] },
+            { name: "Экономист", description: "Анализирует экономические процессы. Прогнозирует развитие рынка и бюджета.", types: [HOLLAND_TYPES.INVESTIGATIVE, HOLLAND_TYPES.ENTERPRISING, HOLLAND_TYPES.CONVENTIONAL] },
+            { name: "Экскурсовод (с ВО)", description: "Разрабатывает и проводит экскурсии по культурно-историческим объектам.", types: [HOLLAND_TYPES.SOCIAL, HOLLAND_TYPES.ARTISTIC, HOLLAND_TYPES.ENTERPRISING] },
+            { name: "Энергетик", description: "Проектирует и обслуживает энергетические системы. Обеспечивает энергоснабжение.", types: [HOLLAND_TYPES.REALISTIC, HOLLAND_TYPES.INVESTIGATIVE] },
+            { name: "Юрист", description: "Консультирует по законам и правам. Представляет интересы в судах и сделках.", types: [HOLLAND_TYPES.SOCIAL, HOLLAND_TYPES.INVESTIGATIVE, HOLLAND_TYPES.ENTERPRISING, HOLLAND_TYPES.CONVENTIONAL] }
+        ];
+        const universities = [ /* ... как в v4 ... */
+             { name: "Московский государственный университет им. М.В. Ломоносова (МГУ)", type: "science", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Moscow_State_University_1.jpg/640px-Moscow_State_University_1.jpg", programs: ["Естественные науки", "Математика", "Физика", "Экономика", "IT", "Юриспруденция", "Филология", "История", "Психология"], info: "Основан в 1755 году. Является старейшим и одним из крупнейших классических университетов России, центром отечественной науки и культуры. Включает десятки факультетов, научно-исследовательских институтов и филиалов.", avgScore: 92, budgetPlaces: 3952, employmentRate: 90, reputation: 10, programKeywords: ["математик", "физик", "химик", "биолог", "геолог", "экономист", "программист", "юрист", "адвокат", "филолог", "лингвист", "переводчик", "историк", "психолог", "социолог", "аналитик"] },
+             { name: "Московский государственный технический университет им. Н.Э. Баумана (МГТУ)", type: "tech", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/Bauman_Moscow_State_Technical_University-8.jpg/640px-Bauman_Moscow_State_Technical_University-8.jpg", programs: ["Инженерия", "Машиностроение", "Робототехника", "Информационные технологии", "Аэрокосмос", "Материаловедение", "Энергетика"], info: "Ведущий технический университет России, основанный в 1830 году. Готовит инженеров по широкому спектру направлений для высокотехнологичных отраслей промышленности.", avgScore: 88, budgetPlaces: 2500, employmentRate: 92, reputation: 9.5, programKeywords: ["инженер", "программист", "робототехник", "материаловед", "энергетик", "конструктор", "метролог", "авиа", "космос"] },
+             { name: "Московский государственный институт международных отношений (МГИМО)", type: "international", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/MGIMO_2015-04-18.jpg/640px-MGIMO_2015-04-18.jpg", programs: ["Международные отношения", "Дипломатия", "Международное право", "Политология", "Мировая экономика", "Журналистика"], info: "Основан в 1944 году. Является одним из ведущих мировых центров подготовки специалистов в области международных отношений, дипломатии, мировой экономики и права.", avgScore: 95, budgetPlaces: 1200, employmentRate: 95, reputation: 9.8, programKeywords: ["дипломат", "международник", "юрист", "политолог", "экономист", "журналист", "переводчик", "аналитик", "регионовед"] },
+             { name: "Национальный исследовательский университет «Высшая школа экономики» (ВШЭ)", type: "economics", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/HSE_main_building_2017.jpg/640px-HSE_main_building_2017.jpg", programs: ["Экономика", "Социология", "Бизнес-информатика", "Дизайн", "Медиакоммуникации", "Право", "Политология", "Психология", "Математика"], info: "Один из ведущих и наиболее динамично развивающихся университетов России, специализирующийся на социально-экономических, гуманитарных науках, математике и компьютерных науках.", avgScore: 93, budgetPlaces: 3500, employmentRate: 93, reputation: 9.6, programKeywords: ["экономист", "финансист", "аналитик", "социолог", "программист", "дизайнер", "журналист", "юрист", "политолог", "психолог", "менеджер", "маркетолог", "математик"] },
+             { name: "Российский университет дружбы народов (РУДН)", type: "international", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/RUDN_University_2013-06-22_1.jpg/640px-RUDN_University_2013-06-22_1.jpg", programs: ["Лингвистика", "Медицина", "Экономика", "Юриспруденция", "Аграрные науки", "Инженерия", "Филология", "Журналистика"], info: "Уникальный международный университет, известный своей мультикультурной средой и подготовкой специалистов для разных стран мира по широкому спектру направлений.", avgScore: 85, budgetPlaces: 2800, employmentRate: 88, reputation: 8.8, programKeywords: ["лингвист", "переводчик", "врач", "экономист", "юрист", "агроном", "инженер", "филолог", "журналист", "международник"] },
+             { name: "Первый Московский государственный медицинский университет им. И.М. Сеченова", type: "medical", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/I.M._Sechenov_First_MSMU_14-2015_img11.jpg/640px-I.M._Sechenov_First_MSMU_14-2015_img11.jpg", programs: ["Лечебное дело", "Стоматология", "Фармация", "Биомедицина", "Педиатрия", "Клиническая психология"], info: "Старейший и ведущий медицинский вуз России с богатой историей и мощной клинической базой. Центр медицинского образования, науки и здравоохранения.", avgScore: 90, budgetPlaces: 1800, employmentRate: 94, reputation: 9.4, programKeywords: ["врач", "терапевт", "хирург", "стоматолог", "дантист", "фармацевт", "провизор", "биолог", "психолог", "медсестра", "медбрат", "биомедик"] },
+             { name: "Российская академия народного хозяйства и государственной службы (РАНХиГС)", type: "management", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/RANEPA_Building_on_Vernadskogo_Prospekt.jpg/640px-RANEPA_Building_on_Vernadskogo_Prospekt.jpg", programs: ["Государственное управление", "Менеджмент", "Юриспруденция", "Экономика", "Политология", "Психология", "HR"], info: "Крупнейший университет России социально-экономического и гуманитарного профиля, специализирующийся на подготовке управленческих кадров для государственной службы и бизнеса.", avgScore: 87, budgetPlaces: 2200, employmentRate: 91, reputation: 9.0, programKeywords: ["менеджер", "управленец", "юрист", "экономист", "политолог", "психолог", "hr", "рекрутер", "аналитик", "госслужащий"] },
+             { name: "Московский государственный академический художественный институт им. В.И. Сурикова", type: "art", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Surikov_Institute_2014.jpg/640px-Surikov_Institute_2014.jpg", programs: ["Живопись", "Графика", "Скульптура", "Архитектура", "Теория и история искусств"], info: "Ведущий художественный вуз России с вековыми традициями академического искусства, входящий в структуру Российской академии художеств.", avgScore: 80, budgetPlaces: 800, employmentRate: 80, reputation: 9.2, programKeywords: ["художник", "скульптор", "график", "архитектор", "искусствовед", "реставратор", "дизайнер"] },
+             { name: "Московский финансово-юридический университет (МФЮА)", type: "law", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Mfua_logo.svg/320px-Mfua_logo.svg.png", programs: ["Финансы и кредит", "Юриспруденция", "Экономическая безопасность", "Менеджмент", "Таможенное дело"], info: "Крупный негосударственный вуз, предлагающий востребованные программы высшего и среднего профессионального образования с акцентом на финансово-юридический профиль.", avgScore: 82, budgetPlaces: 1500, employmentRate: 85, reputation: 8.0, programKeywords: ["юрист", "адвокат", "финансист", "экономист", "менеджер", "бухгалтер", "налоговый инспектор", "таможенник"] },
+             { name: "Национальный исследовательский технологический университет «МИСиС»", type: "tech", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/NUST_MISiS_2.JPG/640px-NUST_MISiS_2.JPG", programs: ["Материаловедение", "Нанотехнологии", "Горное дело", "Металлургия", "Информатика", "Экономика"], info: "Один из ведущих технологических университетов России, специализирующийся на материаловедении, металлургии, горном деле и нанотехнологиях.", avgScore: 86, budgetPlaces: 2000, employmentRate: 90, reputation: 8.9, programKeywords: ["инженер", "материаловед", "металлург", "программист", "нанотехнолог", "геолог", "экономист", "горный инженер"] },
+             { name: "Московский авиационный институт (МАИ)", type: "tech", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/MAI_Volokolamskoe_51-3.jpg/640px-MAI_Volokolamskoe_51-3.jpg", programs: ["Авиастроение", "Космические системы", "Радиоэлектроника", "Двигатели летательных аппаратов", "IT", "Управление в технических системах"], info: "Один из ведущих мировых университетов в аэрокосмической области, готовящий инженеров и конструкторов для авиационной и ракетно-космической техники.", avgScore: 87, budgetPlaces: 2300, employmentRate: 92, reputation: 9.1, programKeywords: ["инженер", "авиаконструктор", "ракетостроение", "программист", "пилот", "радиотехник", "двигателист"] },
+             { name: "Московский политехнический университет", type: "tech", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Moscow_Polytechnic_University_01.jpg/640px-Moscow_Polytechnic_University_01.jpg", programs: ["Робототехника", "Цифровое производство", "Транспортный дизайн", "Информационные технологии", "Издательское дело", "Реклама и связи с общественностью"], info: "Современный университет, возникший в результате объединения нескольких вузов, с фокусом на инженерию, IT, дизайн, медиа и урбанистику.", avgScore: 83, budgetPlaces: 2100, employmentRate: 87, reputation: 8.5, programKeywords: ["инженер", "робототехник", "дизайнер", "программист", "издатель", "редактор", "маркетолог", "пиарщик", "урбанист"] },
+             { name: "Национальный исследовательский университет «МЭИ»", type: "tech", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/MEI_main_building.jpg/640px-MEI_main_building.jpg", programs: ["Электроэнергетика", "Теплоэнергетика", "Альтернативная энергетика", "Радиотехника", "Информатика", "Ядерная энергетика"], info: "Ведущий российский университет в области энергетики, электротехники, радиотехники, электроники и информационных технологий.", avgScore: 84, budgetPlaces: 1900, employmentRate: 89, reputation: 8.7, programKeywords: ["энергетик", "инженер", "радиотехник", "программист", "теплотехник", "электрик", "ядерщик"] },
+             { name: "Российский государственный гуманитарный университет (РГГУ)", type: "humanities", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/RGGU_2015.jpg/640px-RGGU_2015.jpg", programs: ["История", "Философия", "Культурология", "Лингвистика", "Архивоведение", "Музеология", "Психология", "Журналистика", "Искусствоведение"], info: "Один из ведущих центров гуманитарного образования в России, известный своими научными школами и междисциплинарными программами.", avgScore: 88, budgetPlaces: 1700, employmentRate: 85, reputation: 8.6, programKeywords: ["историк", "философ", "культуролог", "лингвист", "переводчик", "архивист", "музеолог", "психолог", "журналист", "редактор", "филолог", "искусствовед"] },
+             { name: "Московский педагогический государственный университет (МПГУ)", type: "education", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7f/MPGU_2015-04-18.jpg/640px-MPGU_2015-04-18.jpg", programs: ["Педагогика (разные профили)", "Психология", "Иностранные языки", "Дефектология", "История", "Филология", "Музыкальное образование"], info: "Старейший педагогический вуз России, лидер в области подготовки учителей, психологов, дефектологов и других специалистов для системы образования.", avgScore: 82, budgetPlaces: 1600, employmentRate: 88, reputation: 8.4, programKeywords: ["педагог", "учитель", "воспитатель", "психолог", "дефектолог", "логопед", "лингвист", "историк", "филолог", "музыкант"] },
+             { name: "Московский государственный юридический университет им. О.Е. Кутафина (МГЮА)", type: "law", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/MSAL_2015-04-18.jpg/640px-MSAL_2015-04-18.jpg", programs: ["Юриспруденция", "Международное право", "Уголовное право", "Судебная экспертиза", "Адвокатура", "Корпоративное право"], info: "Один из крупнейших и наиболее авторитетных юридических вузов России, готовящий юристов для всех сфер деятельности.", avgScore: 91, budgetPlaces: 1300, employmentRate: 93, reputation: 9.3, programKeywords: ["юрист", "адвокат", "прокурор", "судья", "нотариус", "правовед", "следователь"] },
+             { name: "Государственный университет управления (ГУУ)", type: "management", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Guu.jpg/640px-Guu.jpg", programs: ["Менеджмент", "Экономика", "Управление персоналом", "Маркетинг", "Государственное и муниципальное управление", "Логистика"], info: "Первый и один из ведущих вузов России в области управленческого образования, готовящий менеджеров для бизнеса и госсектора.", avgScore: 85, budgetPlaces: 1400, employmentRate: 89, reputation: 8.7, programKeywords: ["менеджер", "управленец", "экономист", "hr", "рекрутер", "маркетолог", "логист", "аналитик", "госслужащий"] },
+             { name: "Национальный исследовательский Московский государственный строительный университет (НИУ МГСУ)", type: "engineering", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/MGSU_2015-04-18.jpg/640px-MGSU_2015-04-18.jpg", programs: ["Архитектура", "Строительство уникальных зданий", "Градостроительство", "Инженерные системы", "Экономика строительства", "Промышленное и гражданское строительство"], info: "Ведущий российский университет в области строительства, архитектуры и градостроительства. Занимается проблемами урбанистики и современных строительных технологий.", avgScore: 81, budgetPlaces: 1800, employmentRate: 88, reputation: 8.3, programKeywords: ["инженер", "строитель", "архитектор", "градостроитель", "проектировщик", "экономист", "сметчик"] },
+             { name: "Российский государственный социальный университет (РГСУ)", type: "social", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Russian_State_Social_University.jpg/640px-Russian_State_Social_University.jpg", programs: ["Социальная работа", "Психология", "Социология", "Конфликтология", "Организация работы с молодежью", "Реклама и связи с общественностью"], info: "Первый в России государственный университет, начавший подготовку специалистов в области социальной работы, социальной психологии и педагогики.", avgScore: 78, budgetPlaces: 1100, employmentRate: 84, reputation: 8.1, programKeywords: ["социальный работник", "психолог", "социолог", "конфликтолог", "менеджер", "пиарщик", "педагог"] },
+             { name: "Российский государственный университет нефти и газа им. И.М. Губкина", type: "engineering", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Gubkin_University_2015.jpg/640px-Gubkin_University_2015.jpg", programs: ["Нефтегазовое дело", "Химическая технология", "Геология нефти и газа", "Автоматизация технологических процессов", "Экономика ТЭК", "Морские нефтегазовые сооружения"], info: "Ведущий университет России в области нефтегазового образования, готовящий кадры для топливно-энергетического комплекса.", avgScore: 89, budgetPlaces: 2400, employmentRate: 94, reputation: 9.2, programKeywords: ["инженер", "нефтяник", "газовик", "химик", "геолог", "автоматизатор", "экономист", "энергетик", "буровик"] }
+        ];
+        const testQuestions = [ /* ... как в v4 ... */
+             { question: "1. Какая деятельность доставляет вам больше удовольствия?", options: [ { text: "Чинить или собирать механизмы, работать с инструментами", types: [HOLLAND_TYPES.REALISTIC] }, { text: "Читать научные статьи, проводить исследования, анализировать данные", types: [HOLLAND_TYPES.INVESTIGATIVE] }, { text: "Придумывать новые идеи, рисовать, сочинять музыку, писать тексты", types: [HOLLAND_TYPES.ARTISTIC] }, { text: "Помогать людям, обучать, консультировать, работать в команде", types: [HOLLAND_TYPES.SOCIAL] } ] },
+             { question: "2. Представьте, что вы работаете над проектом. Какая роль вам ближе?", options: [ { text: "Исполнитель, отвечающий за практическую реализацию", types: [HOLLAND_TYPES.REALISTIC] }, { text: "Аналитик, ищущий оптимальное решение на основе данных", types: [HOLLAND_TYPES.INVESTIGATIVE, HOLLAND_TYPES.CONVENTIONAL] }, { text: "Лидер, мотивирующий команду и организующий процесс", types: [HOLLAND_TYPES.ENTERPRISING, HOLLAND_TYPES.SOCIAL] }, { text: "Генератор идей, отвечающий за креативную составляющую", types: [HOLLAND_TYPES.ARTISTIC, HOLLAND_TYPES.ENTERPRISING] } ] },
+             { question: "3. Какая рабочая среда кажется вам наиболее комфортной?", options: [ { text: "Мастерская, лаборатория, природа, стройплощадка", types: [HOLLAND_TYPES.REALISTIC] }, { text: "Библиотека, научный центр, исследовательский отдел", types: [HOLLAND_TYPES.INVESTIGATIVE] }, { text: "Офис с людьми, школа, больница, общественная организация", types: [HOLLAND_TYPES.SOCIAL] }, { text: "Структурированный офис, архив, банк, бухгалтерия", types: [HOLLAND_TYPES.CONVENTIONAL] } ] },
+             { question: "4. Что для вас важнее в работе?", options: [ { text: "Возможность создавать что-то новое, оригинальное, необычное", types: [HOLLAND_TYPES.ARTISTIC] }, { text: "Возможность помогать людям, быть полезным обществу", types: [HOLLAND_TYPES.SOCIAL] }, { text: "Возможность влиять на события, руководить, достигать успеха", types: [HOLLAND_TYPES.ENTERPRISING] }, { text: "Стабильность, четкие правила, порядок и предсказуемость", types: [HOLLAND_TYPES.CONVENTIONAL] } ] },
+             { question: "5. Выберите тип задач, который вам интереснее решать:", options: [ { text: "Практические задачи, требующие применения физической силы или ловкости", types: [HOLLAND_TYPES.REALISTIC] }, { text: "Интеллектуальные задачи, требующие анализа и логического мышления", types: [HOLLAND_TYPES.INVESTIGATIVE] }, { text: "Задачи, связанные с организацией, планированием и управлением", types: [HOLLAND_TYPES.ENTERPRISING, HOLLAND_TYPES.CONVENTIONAL] }, { text: "Задачи, требующие воображения, интуиции и творческого подхода", types: [HOLLAND_TYPES.ARTISTIC] } ] },
+             { question: "6. Как вы предпочитаете получать информацию?", options: [ { text: "Через практический опыт, пробуя и делая", types: [HOLLAND_TYPES.REALISTIC] }, { text: "Изучая теории, факты, читая специальную литературу", types: [HOLLAND_TYPES.INVESTIGATIVE] }, { text: "Общаясь с экспертами, участвуя в дискуссиях", types: [HOLLAND_TYPES.SOCIAL, HOLLAND_TYPES.ENTERPRISING] }, { text: "Через схемы, таблицы, графики, инструкции", types: [HOLLAND_TYPES.CONVENTIONAL] } ] },
+             { question: "7. Какое утверждение лучше всего вас описывает?", options: [ { text: "Я практичный и предпочитаю конкретные действия", types: [HOLLAND_TYPES.REALISTIC] }, { text: "Я любознательный и люблю анализировать", types: [HOLLAND_TYPES.INVESTIGATIVE] }, { text: "Я эмоциональный и ценю самовыражение", types: [HOLLAND_TYPES.ARTISTIC] }, { text: "Я общительный и ориентирован на помощь другим", types: [HOLLAND_TYPES.SOCIAL] } ] },
+             { question: "8. Какое утверждение также хорошо вас описывает?", options: [ { text: "Я амбициозный и люблю руководить", types: [HOLLAND_TYPES.ENTERPRISING] }, { text: "Я аккуратный и предпочитаю порядок", types: [HOLLAND_TYPES.CONVENTIONAL] }, { text: "Я независимый и предпочитаю работать в одиночку", types: [HOLLAND_TYPES.INVESTIGATIVE, HOLLAND_TYPES.ARTISTIC] }, { text: "Я командный игрок и ценю сотрудничество", types: [HOLLAND_TYPES.SOCIAL, HOLLAND_TYPES.ENTERPRISING] } ] },
+             { question: "9. Выберите занятие, которое вам кажется наиболее привлекательным:", options: [ { text: "Проектирование и создание технических устройств", types: [HOLLAND_TYPES.REALISTIC, HOLLAND_TYPES.INVESTIGATIVE] }, { text: "Написание книги или создание музыкального произведения", types: [HOLLAND_TYPES.ARTISTIC] }, { text: "Организация благотворительного мероприятия", types: [HOLLAND_TYPES.SOCIAL, HOLLAND_TYPES.ENTERPRISING] }, { text: "Разработка финансовой стратегии компании", types: [HOLLAND_TYPES.ENTERPRISING, HOLLAND_TYPES.CONVENTIONAL] } ] },
+             { question: "10. Как вы относитесь к риску?", options: [ { text: "Предпочитаю избегать риска, ценю надежность", types: [HOLLAND_TYPES.CONVENTIONAL, HOLLAND_TYPES.REALISTIC] }, { text: "Готов(а) к обдуманному риску ради значимого результата", types: [HOLLAND_TYPES.ENTERPRISING, HOLLAND_TYPES.INVESTIGATIVE] }, { text: "Риск интересен, если он связан с творчеством или новыми идеями", types: [HOLLAND_TYPES.ARTISTIC] }, { text: "Готов(а) рисковать, чтобы помочь другим или отстоять принципы", types: [HOLLAND_TYPES.SOCIAL] } ] },
+             { question: "11. Что вам важнее в информации?", options: [ { text: "Практическая применимость, возможность использовать в деле", types: [HOLLAND_TYPES.REALISTIC] }, { text: "Точность, объективность, логическая стройность", types: [HOLLAND_TYPES.INVESTIGATIVE] }, { text: "Эмоциональная насыщенность, образность, оригинальность", types: [HOLLAND_TYPES.ARTISTIC] }, { text: "Понятность для других, возможность легко объяснить", types: [HOLLAND_TYPES.SOCIAL] } ] },
+             { question: "12. Выберите, что вам ближе:", options: [ { text: "Работа с конкретными объектами (вещи, техника, природа)", types: [HOLLAND_TYPES.REALISTIC] }, { text: "Работа с абстрактными идеями и символами (наука, данные)", types: [HOLLAND_TYPES.INVESTIGATIVE, HOLLAND_TYPES.CONVENTIONAL] }, { text: "Работа с людьми (общение, обучение, управление)", types: [HOLLAND_TYPES.SOCIAL, HOLLAND_TYPES.ENTERPRISING] }, { text: "Работа с художественными образами (искусство, дизайн)", types: [HOLLAND_TYPES.ARTISTIC] } ] }
+        ];
+
+
+        // --- Глобальные переменные ---
+        let currentUniForModal = null;
+        let lastTestResultTypes = [];
+        let currentProfessionFilterTypes = [];
+        let processedUniversities = [];
+        const PROFESSIONS_PAGE_SIZE = 12;
+        let professionsVisibleCount = PROFESSIONS_PAGE_SIZE;
+        let currentFilteredProfessions = [];
+        let selectedForComparison = []; // Массив имен вузов для сравнения
+
+
+        // --- DOM Элементы ---
+        const themeSwitchBtn = document.querySelector('.theme-switch');
+        const profileBtn = document.getElementById('profile-btn');
+        const startTestBtn = document.getElementById('start-test-btn');
+        const testStartDiv = document.getElementById('test-start');
+        const careerTestForm = document.getElementById('career-test');
+        const questionsContainer = document.getElementById('questions-container');
+        const resultsSection = document.getElementById('results');
+        const testSection = document.getElementById('test');
+        const resultTextDiv = document.getElementById('result-text');
+        const resultTypesDiv = document.getElementById('result-types');
+        const resultExplanationDiv = document.getElementById('result-explanation'); // Пояснение
+        const topMatchingProfessionsDiv = document.getElementById('top-matching-professions');
+        const showMatchingProfessionsBtn = document.getElementById('show-matching-professions-btn');
+        const saveResultBtn = document.getElementById('save-result-btn');
+        const professionSearchInput = document.getElementById('profession-search');
+        const professionsListDiv = document.getElementById('professions-list');
+        const resetProfessionFilterBtn = document.getElementById('reset-profession-filter-btn');
+        const showMoreProfessionsContainer = document.getElementById('show-more-professions-container');
+        const showMoreProfessionsBtn = document.getElementById('show-more-professions-btn');
+        const uniFilterSelect = document.getElementById('uni-filter');
+        const uniSortSelect = document.getElementById('uni-sort');
+        const resetUniFilterBtn = document.getElementById('reset-uni-filter-btn');
+        const compareUnisBtn = document.getElementById('compare-unis-btn'); // Кнопка сравнения
+        const compareCountSpan = document.getElementById('compare-count'); // Счетчик для сравнения
+        const allUnisListDiv = document.getElementById('all-unis-list');
+        const uniModal = document.getElementById('uni-modal');
+        const profileModal = document.getElementById('profile-modal');
+        const compareModal = document.getElementById('compare-modal'); // Модалка сравнения
+        const compareTableContainer = document.getElementById('compare-table-container'); // Контейнер таблицы сравнения
+        const closeModalBtns = document.querySelectorAll('.modal .close');
+        const uniModalTitle = document.getElementById('uni-modal-title');
+        const uniModalImage = document.getElementById('uni-modal-image');
+        const uniModalPrograms = document.getElementById('uni-programs');
+        const uniModalInfo = document.getElementById('uni-info');
+        const uniModalBudget = document.getElementById('uni-budget');
+        const uniModalAvgScore = document.getElementById('uni-avg-score');
+        const uniModalEmployment = document.getElementById('uni-employment');
+        const uniModalReputation = document.getElementById('uni-reputation');
+        const uniModalCompositeScore = document.getElementById('uni-composite-score-modal');
+        const modalProfessionsList = document.getElementById('modal-professions-list');
+        const addToFavoritesBtn = document.getElementById('add-to-favorites-btn');
+        const savedResultsDiv = document.getElementById('saved-results');
+        const favoritesDiv = document.getElementById('favorites');
+        const clearProfileBtn = document.getElementById('clear-profile-btn');
+        const currentYearSpan = document.getElementById('current-year');
+        const toastElement = document.getElementById('toast');
+
+
+
+
+        // --- Функции ---
+
+
+        /**
+         * Инициализация иконок Lucide
+         */
+        function initLucideIcons() {
+             try { // Добавляем try-catch на случай ошибок библиотеки
+                 if (window.lucide) {
+                     lucide.createIcons();
+                 } else {
+                     console.warn("Lucide library not found or not loaded yet.");
+                 }
+             } catch (error) {
+                 console.error("Error initializing Lucide icons:", error);
+             }
+         }
+
+
+        /**
+         * Инициализация темы оформления
+         */
+        function initTheme() {
+            const savedTheme = localStorage.getItem('unihubTheme') || 'light';
+            document.body.className = savedTheme;
+            const iconName = savedTheme === 'dark' ? 'sun' : 'moon';
+            themeSwitchBtn.innerHTML = `<i class="icon icon-only" data-lucide="${iconName}"></i>`;
+            themeSwitchBtn.title = savedTheme === 'dark' ? 'Переключить на светлую тему' : 'Переключить на темную тему';
+            // Не вызываем initLucideIcons здесь, вызовем в DOMContentLoaded один раз
+        }
+
+
+        /**
+         * Переключение темы оформления
+         */
+        function toggleTheme() {
+            const isDark = document.body.classList.toggle('dark');
+            const newTheme = isDark ? 'dark' : 'light';
+            localStorage.setItem('unihubTheme', newTheme);
+            const iconName = newTheme === 'dark' ? 'sun' : 'moon';
+            themeSwitchBtn.innerHTML = `<i class="icon icon-only" data-lucide="${iconName}"></i>`;
+            themeSwitchBtn.title = newTheme === 'dark' ? 'Переключить на светлую тему' : 'Переключить на темную тему';
+            initLucideIcons(); // Пересоздаем иконку
+        }
+
+
+        /**
+         * Отображение всплывающего уведомления (toast)
+         */
+        function showToast(message, duration = 3000) {
+            toastElement.textContent = message;
+            toastElement.classList.add('show');
+            setTimeout(() => {
+                toastElement.classList.remove('show');
+            }, duration);
+        }
+
+
+        /**
+         * Подсветка текста
+         * @param {string} text - Исходный текст
+         * @param {string} term - Искомый терм
+         * @returns {string} - HTML с подсветкой
+         */
+        function highlightText(text, term) {
+            if (!term || !text) {
+                return text;
+            }
+            // Экранируем спецсимволы в термине для регулярного выражения
+            const escapedTerm = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            const regex = new RegExp(`(${escapedTerm})`, 'gi'); // 'gi' - global, case-insensitive
+            return text.replace(regex, '<mark>$1</mark>');
+        }
+
+
+
+
+        /**
+         * Генерация HTML для тега типа RIASEC
+         */
+        function createTypeTagHTML(type) {
+            const typeInfo = TYPE_DESCRIPTIONS[type] || { name: type };
+            return `<span class="type-tag ${type}" title="${typeInfo.description}">${typeInfo.name}</span>`;
+        }
+
+
+        /**
+         * Расчет комплексного балла для ВУЗа
+         */
+        function calculateCompositeScore(uni) { /* ... как в v4 ... */
+            const weights = { avgScore: 0.35, reputation: 0.30, employmentRate: 0.20, budgetPlaces: 0.15 };
+            const maxAvgScore = 100, minAvgScore = 60, maxBudgetPlaces = 4000, maxReputation = 10, maxEmploymentRate = 100;
+            const normalizedScore = Math.max(0, ((uni.avgScore || minAvgScore) - minAvgScore)) / (maxAvgScore - minAvgScore);
+            const normalizedReputation = (uni.reputation || 1) / maxReputation;
+            const normalizedEmployment = (uni.employmentRate || 50) / maxEmploymentRate;
+            const normalizedBudget = Math.log1p(uni.budgetPlaces || 0) / Math.log1p(maxBudgetPlaces);
+            const compositeScore = ((normalizedScore * weights.avgScore) + (normalizedReputation * weights.reputation) + (normalizedEmployment * weights.employmentRate) + (normalizedBudget * weights.budgetPlaces)) * 100;
+            return Math.max(0, Math.min(100, Math.round(compositeScore)));
+         }
+
+
+        /**
+         * Обработка данных ВУЗов
+         */
+        function processUniversityData() { /* ... как в v4 ... */
+            processedUniversities = universities.map(uni => {
+                const initials = uni.name.split(' ').map(word => word[0]).join('').toUpperCase().substring(0, 3);
+                const placeholderImg = `https://placehold.co/300x160/0a4a8e/FFFFFF?text=${initials}&font=inter`;
+                return { ...uni, compositeScore: calculateCompositeScore(uni), imagePlaceholder: placeholderImg, imageUrl: uni.imageUrl || placeholderImg };
+            });
+         }
+
+
+
+
+        /**
+         * Генерация HTML для карточки ВУЗа (с чекбоксом сравнения)
+         */
+        function createUniCardHTML(uni) {
+            const typeIcon = UNI_TYPE_ICONS[uni.type] || UNI_TYPE_ICONS.default;
+            const isSelected = selectedForComparison.includes(uni.name);
+            return `
+                <div class="uni-card" data-uni-name="${uni.name}">
+                     <label class="compare-checkbox-label" title="Выбрать для сравнения">
+                         <input type="checkbox" class="compare-checkbox" value="${uni.name}" ${isSelected ? 'checked' : ''}>
+                     </label>
+                     <div class="uni-type-icon" title="Тип: ${uni.type}">
+                        <i class="icon icon-only icon-sm" data-lucide="${typeIcon}"></i>
+                    </div>
+                    <div class="uni-image" data-action="open-modal">
+                        <img src="${uni.imageUrl}" alt="Фото ${uni.name}" loading="lazy"
+                             onerror="this.onerror=null; this.src='${uni.imagePlaceholder}'; console.warn('Failed to load image:', '${uni.imageUrl}')">
+                    </div>
+                    <div class="uni-content" data-action="open-modal">
+                        <h4>${uni.name}</h4>
+                        <p class="preview-info">${uni.info}</p>
+                        <div class="uni-meta">
+                            <span class="uni-composite-score" title="Комплексный балл"><i class="icon icon-sm" data-lucide="trending-up"></i> <strong>${uni.compositeScore}</strong></span>
+                             <span class="uni-avg-score" title="Средний балл ЕГЭ"><i class="icon icon-sm" data-lucide="award"></i> <strong>${uni.avgScore || 'н/д'}</strong></span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+
+        /**
+         * Заполнение селектора фильтра ВУЗов
+         */
+         function populateUniFilterOptions() { /* ... как в v4 ... */
+            const uniqueTypes = [...new Set(universities.map(uni => uni.type))].sort((a,b) => a.localeCompare(b, 'ru'));
+            uniFilterSelect.innerHTML = '<option value="all">Все направления</option>';
+            uniqueTypes.forEach(type => {
+                let typeName = type.charAt(0).toUpperCase() + type.slice(1);
+                // Простое добавление названий для примера
+                const names = { tech: 'Технические', science: 'Научные', engineering: 'Инженерные', international: 'Международные', economics: 'Экономика', medical: 'Медицина', management: 'Управление', art: 'Искусство', law: 'Юриспруденция', humanities: 'Гуманитарные', education: 'Образование', social: 'Социальные'};
+                typeName = names[type] || typeName;
+                const option = document.createElement('option'); option.value = type; option.textContent = typeName;
+                uniFilterSelect.appendChild(option);
+            });
+         }
+
+
+        /**
+         * Сортировка и отображение списка ВУЗов
+         */
+        function renderUniversities() { /* ... как в v4 ... */
+            const filterValue = uniFilterSelect.value;
+            const sortBy = uniSortSelect.value;
+            let filteredUnis = (filterValue === 'all') ? [...processedUniversities] : processedUniversities.filter(uni => uni.type === filterValue);
+            filteredUnis.sort((a, b) => {
+                switch (sortBy) {
+                    case 'avgScore': return (b.avgScore || 0) - (a.avgScore || 0);
+                    case 'budgetPlaces': return (b.budgetPlaces || 0) - (a.budgetPlaces || 0);
+                    case 'reputation': return (b.reputation || 0) - (a.reputation || 0);
+                    case 'name': return a.name.localeCompare(b.name, 'ru');
+                    default: return b.compositeScore - a.compositeScore;
+                }
+            });
+            allUnisListDiv.innerHTML = filteredUnis.map(createUniCardHTML).join('');
+            updateCompareButtonState(); // Обновляем состояние кнопки сравнения
+            initLucideIcons();
+        }
+
+
+        /**
+        * Сброс фильтров и сортировки вузов
+        */
+        function resetUniversityFilters() { /* ... как в v4 ... */
+            uniFilterSelect.value = 'all';
+            uniSortSelect.value = 'compositeScore';
+            selectedForComparison = []; // Сбрасываем выбор для сравнения
+            renderUniversities();
+            showToast("Фильтры и сортировка вузов сброшены.");
+        }
+
+
+        /**
+         * Обновление состояния кнопки "Сравнить"
+         */
+        function updateCompareButtonState() {
+            const count = selectedForComparison.length;
+            compareCountSpan.textContent = count;
+            if (count >= 2 && count <= 3) {
+                compareUnisBtn.disabled = false;
+                compareUnisBtn.classList.remove('hidden');
+            } else {
+                compareUnisBtn.disabled = true;
+                 // Скрываем кнопку, если выбрано 0 или 1, или больше 3
+                 if (count === 0 || count > 3) {
+                     compareUnisBtn.classList.add('hidden');
+                 } else {
+                     // Показываем, но неактивна, если выбран 1
+                     compareUnisBtn.classList.remove('hidden');
+                 }
+            }
+        }
+
+
+        /**
+         * Обработка выбора ВУЗа для сравнения
+         * @param {Event} event
+         */
+        function handleCompareSelection(event) {
+            const checkbox = event.target;
+            const uniName = checkbox.value;
+            if (checkbox.checked) {
+                if (selectedForComparison.length < 3) {
+                    selectedForComparison.push(uniName);
+                } else {
+                    checkbox.checked = false; // Не даем выбрать больше 3
+                    showToast("Можно выбрать не более 3 вузов для сравнения.");
+                }
+            } else {
+                selectedForComparison = selectedForComparison.filter(name => name !== uniName);
+            }
+            updateCompareButtonState();
+        }
+
+
+        /**
+         * Отображение модального окна сравнения
+         */
+        function showCompareModal() {
+            if (selectedForComparison.length < 2 || selectedForComparison.length > 3) {
+                showToast("Выберите 2 или 3 вуза для сравнения.");
+                return;
+            }
+
+
+            const unisToCompare = processedUniversities.filter(uni => selectedForComparison.includes(uni.name));
+
+
+            // Строим таблицу сравнения
+            let tableHTML = '<table><thead><tr><th>Параметр</th>';
+            unisToCompare.forEach(uni => {
+                tableHTML += `<th>${uni.name}</th>`;
+            });
+            tableHTML += '</tr></thead><tbody>';
+
+
+            // Добавляем строки параметров
+            const params = [
+                { key: 'compositeScore', name: 'Компл. балл' },
+                { key: 'avgScore', name: 'Ср. балл ЕГЭ' },
+                { key: 'budgetPlaces', name: 'Бюдж. места' },
+                { key: 'employmentRate', name: 'Трудоустр. (%)' },
+                { key: 'reputation', name: 'Репутация (/10)' },
+                { key: 'programs', name: 'Направления' }
+            ];
+
+
+            params.forEach(param => {
+                tableHTML += `<tr><td><strong>${param.name}</strong></td>`;
+                unisToCompare.forEach(uni => {
+                    let value = uni[param.key] || 'н/д';
+                    if (param.key === 'programs') {
+                        value = `<ul>${(uni.programs || []).map(p => `<li>${p}</li>`).join('')}</ul>`;
+                    } else if (param.key === 'employmentRate') {
+                        value = `${value}%`;
+                    }
+                    tableHTML += `<td>${value}</td>`;
+                });
+                tableHTML += '</tr>';
+            });
+
+
+            tableHTML += '</tbody></table>';
+            compareTableContainer.innerHTML = tableHTML;
+            compareModal.style.display = 'block';
+            initLucideIcons(); // На всякий случай, если в таблице будут иконки
+        }
+
+
+
+
+        /**
+         * Открытие модального окна с деталями ВУЗа
+         */
+        function openUniModal(uniName) { /* ... как в v4, но с подсветкой профессий */
+            currentUniForModal = processedUniversities.find(u => u.name === uniName);
+            if (currentUniForModal) {
+                uniModalTitle.textContent = currentUniForModal.name;
+                uniModalImage.src = currentUniForModal.imageUrl;
+                uniModalImage.alt = `Фото ${currentUniForModal.name}`;
+                uniModalImage.onerror = () => { uniModalImage.src = currentUniForModal.imagePlaceholder; console.warn('Failed to load image in modal:', currentUniForModal.imageUrl); };
+                uniModalPrograms.textContent = currentUniForModal.programs.join(', ');
+                uniModalInfo.textContent = currentUniForModal.info;
+                uniModalBudget.textContent = currentUniForModal.budgetPlaces || 'н/д';
+                uniModalAvgScore.textContent = currentUniForModal.avgScore || 'н/д';
+                uniModalEmployment.textContent = currentUniForModal.employmentRate || 'н/д';
+                uniModalReputation.textContent = currentUniForModal.reputation || 'н/д';
+                uniModalCompositeScore.textContent = currentUniForModal.compositeScore;
+                updateFavoriteButtonText();
+                displayMatchingProfessions(currentUniForModal); // Отображаем подходящие профессии
+                uniModal.style.display = 'block';
+                initLucideIcons();
+            } else { /* ... */ }
+        }
+
+
+        /**
+         * Отображение подходящих профессий в модалке ВУЗа (с подсветкой)
+         */
+        function displayMatchingProfessions(uni) { /* ... как в v4, но с подсветкой */
+            const keywords = uni.programKeywords || [];
+            modalProfessionsList.innerHTML = '<li class="no-professions">Загрузка...</li>';
+            if (keywords.length === 0) { modalProfessionsList.innerHTML = '<li class="no-professions">Ключевые слова не заданы.</li>'; return; }
+
+
+            setTimeout(() => {
+                const matchingProfessions = professions.filter(prof => {
+                    const nameDesc = `${prof.name.toLowerCase()} ${prof.description.toLowerCase()}`;
+                    return keywords.some(keyword => nameDesc.includes(keyword.toLowerCase().trim()));
+                });
+
+
+                if (matchingProfessions.length > 0) {
+                    modalProfessionsList.innerHTML = matchingProfessions
+                        .map(prof => {
+                            // Подсветка ключевых слов ВУЗа в названии профессии
+                            let highlightedName = prof.name;
+                            keywords.forEach(kw => {
+                                highlightedName = highlightText(highlightedName, kw);
+                            });
+                            return `<li>${highlightedName}</li>`;
+                        })
+                        .join('');
+                } else { modalProfessionsList.innerHTML = '<li class="no-professions">Подходящих профессий не найдено.</li>'; }
+            }, 10);
+        }
+
+
+
+
+        /**
+         * Закрытие всех модальных окон
+         */
+        function closeModals() { /* ... как в v4 ... */
+             document.querySelectorAll('.modal').forEach(modal => { modal.style.display = 'none'; });
+        }
+
+
+        /**
+         * Рендеринг вопросов теста
+         */
+        function renderTestQuestions() { /* ... как в v4 ... */
+             questionsContainer.innerHTML = testQuestions.map((q, index) => {
+                const questionName = `q${index + 1}`;
+                return `
+                    <div class="question"> <p>${q.question}</p> <div class="options"> <fieldset>
+                    <legend>Ответы ${index + 1}</legend>
+                    ${q.options.map((option, optionIndex) => `<label><input type="radio" name="${questionName}" value="${optionIndex}" required> ${option.text}</label>`).join('')}
+                    </fieldset> </div> </div>`;
+             }).join('');
+        }
+
+
+        /**
+         * Обработка отправки формы теста
+         */
+        function handleTestSubmit(e) { /* ... как в v4 ... */
+             e.preventDefault(); const formData = new FormData(e.target);
+             const scores = { [HOLLAND_TYPES.REALISTIC]: 0, [HOLLAND_TYPES.INVESTIGATIVE]: 0, [HOLLAND_TYPES.ARTISTIC]: 0, [HOLLAND_TYPES.SOCIAL]: 0, [HOLLAND_TYPES.ENTERPRISING]: 0, [HOLLAND_TYPES.CONVENTIONAL]: 0 };
+             let answeredQuestions = 0;
+             for (let i = 0; i < testQuestions.length; i++) {
+                const questionName = `q${i + 1}`; const selectedOptionIndex = formData.get(questionName);
+                if (selectedOptionIndex !== null) {
+                    answeredQuestions++; const selectedOption = testQuestions[i].options[parseInt(selectedOptionIndex)];
+                    selectedOption.types.forEach(type => { if (scores.hasOwnProperty(type)) { scores[type]++; } });
+                }
+             }
+             if (answeredQuestions < testQuestions.length) { showToast("Пожалуйста, ответьте на все вопросы теста."); return; }
+             const sortedScores = Object.entries(scores).sort(([,a], [,b]) => b - a);
+             lastTestResultTypes = sortedScores.slice(0, 1).map(([type]) => type);
+             if (sortedScores.length > 1 && sortedScores[0][1] > 0) {
+                 if (sortedScores[0][1] === sortedScores[1][1]) {
+                     lastTestResultTypes.push(sortedScores[1][0]);
+                     if (sortedScores.length > 2 && sortedScores[1][1] === sortedScores[2][1]) { lastTestResultTypes.push(sortedScores[2][0]); }
+                 } else if (lastTestResultTypes.length < 2 && sortedScores[1][1] > 0) { lastTestResultTypes.push(sortedScores[1][0]); }
+             }
+             lastTestResultTypes = lastTestResultTypes.slice(0, 3);
+             showResults(lastTestResultTypes);
+             resultsSection.scrollIntoView({ behavior: 'smooth' });
+        }
+
+
+        /**
+         * Отображение результатов теста (с пояснением и топ-3 профессиями)
+         */
+        function showResults(resultTypes) { /* ... как в v4, но с пояснением */
+            testSection.classList.add('hidden');
+            resultsSection.classList.remove('hidden');
+
+
+            const typeNames = resultTypes.map(type => TYPE_DESCRIPTIONS[type]?.name || type).join(' / ');
+            const descriptions = resultTypes.map(type => TYPE_DESCRIPTIONS[type]?.description || '').join(' ');
+            const explanation = resultTypes.map(type => TYPE_DESCRIPTIONS[type]?.explanation || '').join(' '); // Пояснение
+
+
+            resultTextDiv.innerHTML = `<h3>Ваши ведущие типы: ${typeNames}</h3> <p>${descriptions}</p>`;
+            resultExplanationDiv.innerHTML = `<p>${explanation}</p>`; // Добавляем пояснение
+            resultTypesDiv.innerHTML = resultTypes.map(createTypeTagHTML).join('');
+
+
+            const matchingProfessions = professions.filter(prof => resultTypes.some(filterType => prof.types.includes(filterType)));
+            if (matchingProfessions.length > 0) {
+                topMatchingProfessionsDiv.classList.remove('hidden');
+                topMatchingProfessionsDiv.querySelector('ul').innerHTML = matchingProfessions.slice(0, 3).map(prof => `<li>${prof.name}</li>`).join('');
+            } else { topMatchingProfessionsDiv.classList.add('hidden'); }
+            initLucideIcons();
+        }
+
+
+
+
+        /**
+         * Сохранение результата теста
+         */
+        function saveResult() { /* ... как в v4 ... */
+            if (lastTestResultTypes.length > 0) {
+                const resultToSave = { types: lastTestResultTypes, date: new Date().toLocaleDateString('ru-RU') };
+                let saved = JSON.parse(localStorage.getItem('unihubTestResultsV2') || '[]');
+                saved.unshift(resultToSave); saved = saved.slice(0, 5);
+                localStorage.setItem('unihubTestResultsV2', JSON.stringify(saved));
+                showToast("Результат теста сохранен в профиле!"); loadProfileData();
+            } else { showToast("Сначала пройдите тест."); }
+        }
+
+
+        /**
+         * Генерация HTML для карточки профессии (с подсветкой)
+         */
+        function createProfessionCardHTML(prof, searchTerm = '') {
+            const typeTagsHTML = prof.types.map(createTypeTagHTML).join('');
+            // Подсветка имени и описания
+            const highlightedName = highlightText(prof.name, searchTerm);
+            const highlightedDesc = highlightText(prof.description, searchTerm);
+            return `
+                <div class="profession-card" data-profession-name="${prof.name}" title="Показать подходящие ВУЗы для '${prof.name}'">
+                    <h4>${highlightedName}</h4>
+                    <p>${highlightedDesc}</p>
+                    <div class="profession-types">${typeTagsHTML}</div>
+                    </div>
+            `;
+        }
+
+
+        /**
+         * Отображение списка профессий (с пагинацией и подсветкой)
+         */
+        function renderProfessions(profsToRender = professions, filterTypes = []) { /* ... как в v4, но с подсветкой */
+            currentProfessionFilterTypes = filterTypes;
+            let filteredByTypes = profsToRender;
+            if (filterTypes.length > 0) {
+                 filteredByTypes = profsToRender.filter(prof => filterTypes.some(filterType => prof.types.includes(filterType)));
+                 resetProfessionFilterBtn.classList.remove('hidden');
+            } else { resetProfessionFilterBtn.classList.add('hidden'); }
+
+
+            const searchTerm = professionSearchInput.value.toLowerCase().trim();
+            currentFilteredProfessions = filteredByTypes;
+            if (searchTerm) {
+                 currentFilteredProfessions = filteredByTypes.filter(p =>
+                    p.name.toLowerCase().includes(searchTerm) || p.description.toLowerCase().includes(searchTerm) ||
+                    p.types.some(type => (TYPE_DESCRIPTIONS[type]?.name.toLowerCase() || '').includes(searchTerm))
+                );
+            }
+
+
+            const professionsToDisplay = currentFilteredProfessions.slice(0, professionsVisibleCount);
+            professionsListDiv.innerHTML = professionsToDisplay.length > 0
+                ? professionsToDisplay.map(prof => createProfessionCardHTML(prof, searchTerm)).join('') // Передаем searchTerm
+                : '<p style="grid-column: 1 / -1; text-align: center; color: var(--text-muted-color);">Профессии не найдены.</p>';
+
+
+            if (currentFilteredProfessions.length > professionsVisibleCount) { showMoreProfessionsContainer.classList.remove('hidden'); }
+            else { showMoreProfessionsContainer.classList.add('hidden'); }
+            initLucideIcons();
+        }
+
+
+        /**
+         * Показать следующую "страницу" профессий
+         */
+        function showMoreProfessions() { /* ... как в v4 ... */
+             professionsVisibleCount += PROFESSIONS_PAGE_SIZE;
+             renderProfessions(professions, currentProfessionFilterTypes);
+        }
+
+
+
+
+        /**
+         * Фильтрация списка профессий (при поиске)
+         */
+        function filterProfessions() { /* ... как в v4 ... */
+            professionsVisibleCount = PROFESSIONS_PAGE_SIZE;
+            renderProfessions(professions, currentProfessionFilterTypes);
+        }
+
+
+        /**
+        * Сброс фильтра профессий
+        */
+        function resetProfessionFilter() { /* ... как в v4 ... */
+            currentProfessionFilterTypes = []; professionSearchInput.value = '';
+            professionsVisibleCount = PROFESSIONS_PAGE_SIZE; renderProfessions();
+            resetProfessionFilterBtn.classList.add('hidden');
+        }
+
+
+        /**
+         * Фильтрация ВУЗов по выбранной профессии
+         */
+        function filterUniversitiesByProfession(professionName) { /* ... как в v4 ... */
+             const profession = professions.find(p => p.name === professionName);
+             if (!profession) return;
+             showToast(`Поиск ВУЗов для: ${professionName}`);
+             const keywords = profession.name.toLowerCase().split(' ').concat(profession.types); // Ключи = слова из названия + типы RIASEC
+             const matchingUnis = processedUniversities.filter(uni =>
+                 uni.programKeywords && uni.programKeywords.some(uniKeyword =>
+                     keywords.some(profKeyword => uniKeyword.toLowerCase().includes(profKeyword.toLowerCase().trim()))
+                 )
+             );
+             uniFilterSelect.value = 'all'; uniSortSelect.value = 'compositeScore';
+             allUnisListDiv.innerHTML = matchingUnis.length > 0
+                ? matchingUnis.map(createUniCardHTML).join('')
+                : '<p style="grid-column: 1 / -1; text-align: center; color: var(--text-muted-color);">ВУЗы с подходящими программами не найдены.</p>';
+             initLucideIcons();
+             document.getElementById('universities').scrollIntoView({ behavior: 'smooth' });
+             resetUniFilterBtn.classList.remove('hidden'); // Показываем кнопку сброса, т.к. применен неявный фильтр
+        }
+
+
+
+
+        /**
+         * Добавление/удаление ВУЗа из избранного
+         */
+        function toggleFavorite() { /* ... как в v4 ... */
+            if (!currentUniForModal) return; const uniName = currentUniForModal.name;
+            let favorites = JSON.parse(localStorage.getItem('unihubFavorites') || '[]'); const index = favorites.indexOf(uniName);
+            if (index > -1) { favorites.splice(index, 1); showToast(`${uniName} удален из избранного.`); }
+            else { favorites.push(uniName); showToast(`${uniName} добавлен в избранное!`); }
+            localStorage.setItem('unihubFavorites', JSON.stringify(favorites)); updateFavoriteButtonText(); loadProfileData();
+        }
+
+
+        /**
+         * Обновление текста кнопки "В избранное"
+         */
+         function updateFavoriteButtonText() { /* ... как в v4 ... */
+             if (!currentUniForModal) return; const favorites = JSON.parse(localStorage.getItem('unihubFavorites') || '[]');
+             const heartIcon = '<i class="icon" data-lucide="heart"></i>'; const brokenHeartIcon = '<i class="icon" data-lucide="heart-off"></i>';
+             if (favorites.includes(currentUniForModal.name)) { addToFavoritesBtn.innerHTML = `${brokenHeartIcon} Убрать из избранного`; addToFavoritesBtn.style.backgroundColor = '#aaa'; }
+             else { addToFavoritesBtn.innerHTML = `${heartIcon} В избранное`; addToFavoritesBtn.style.backgroundColor = '#e44d64'; }
+             initLucideIcons();
+         }
+
+
+
+
+        /**
+         * Загрузка и отображение данных профиля
+         */
+        function loadProfileData() { /* ... как в v4 ... */
+            const savedTestResults = JSON.parse(localStorage.getItem('unihubTestResultsV2') || '[]');
+            if (savedTestResults.length > 0) {
+                savedResultsDiv.innerHTML = savedTestResults.map((res, index) => {
+                     const typeNames = res.types.map(type => `<strong>${TYPE_DESCRIPTIONS[type]?.name || type}</strong>`).join(', ');
+                    return `<div><span>${res.date}: ${typeNames}</span><button type="button" title="Удалить результат" onclick="removeTestResult(${index})"><i class="icon icon-only" data-lucide="trash-2"></i></button></div>`;
+                }).join('');
+            } else { savedResultsDiv.innerHTML = '<p>Вы еще не сохраняли результаты теста.</p>'; }
+            const favoriteUnis = JSON.parse(localStorage.getItem('unihubFavorites') || '[]');
+             if (favoriteUnis.length > 0) {
+                favoritesDiv.innerHTML = favoriteUnis.map((uniName, index) => `<div><span><strong>${uniName}</strong></span><button type="button" title="Удалить из избранного" onclick="removeFavorite(${index})"><i class="icon icon-only" data-lucide="trash-2"></i></button></div>`).join('');
+            } else { favoritesDiv.innerHTML = '<p>Вы еще не добавляли ВУЗы в избранное.</p>'; }
+            initLucideIcons();
+        }
+
+
+        /**
+         * Удаление результата теста из профиля
+         */
+        window.removeTestResult = function(index) { /* ... как в v4 ... */
+             let saved = JSON.parse(localStorage.getItem('unihubTestResultsV2') || '[]');
+             if (index >= 0 && index < saved.length) { saved.splice(index, 1); localStorage.setItem('unihubTestResultsV2', JSON.stringify(saved)); loadProfileData(); showToast("Результат теста удален."); }
+        }
+
+
+        /**
+         * Удаление ВУЗа из избранного в профиле
+         */
+         window.removeFavorite = function(index) { /* ... как в v4 ... */
+             let favorites = JSON.parse(localStorage.getItem('unihubFavorites') || '[]');
+             if (index >= 0 && index < favorites.length) {
+                 const removedUniName = favorites.splice(index, 1)[0]; localStorage.setItem('unihubFavorites', JSON.stringify(favorites));
+                 loadProfileData(); showToast(`${removedUniName} удален из избранного.`);
+                 if (uniModal.style.display === 'block' && currentUniForModal?.name === removedUniName) { updateFavoriteButtonText(); }
+             }
+         }
+
+
+
+
+        /**
+        * Очистка данных профиля из localStorage
+        */
+        function clearProfileData() { /* ... как в v4 ... */
+            if (confirm("Вы уверены, что хотите очистить все сохраненные результаты и избранное? Это действие необратимо.")) {
+                localStorage.removeItem('unihubTestResultsV2'); localStorage.removeItem('unihubFavorites');
+                loadProfileData(); showToast("Данные профиля очищены.");
+            }
+        }
+
+
+
+
+        // --- Установка Обработчиков Событий ---
+        function setupEventListeners() {
+            themeSwitchBtn.addEventListener('click', toggleTheme);
+            profileBtn.addEventListener('click', () => { loadProfileData(); profileModal.style.display = 'block'; initLucideIcons();});
+            closeModalBtns.forEach(btn => btn.addEventListener('click', closeModals));
+            window.addEventListener('click', (event) => { if (event.target.classList.contains('modal')) { closeModals(); } });
+            startTestBtn.addEventListener('click', () => { testStartDiv.classList.add('hidden'); careerTestForm.classList.remove('hidden'); resultsSection.classList.add('hidden'); renderTestQuestions(); initLucideIcons(); });
+            careerTestForm.addEventListener('submit', handleTestSubmit);
+            saveResultBtn.addEventListener('click', saveResult);
+            showMatchingProfessionsBtn.addEventListener('click', () => {
+                if (lastTestResultTypes.length > 0) {
+                    professionsVisibleCount = PROFESSIONS_PAGE_SIZE; renderProfessions(professions, lastTestResultTypes);
+                    document.getElementById('professions').scrollIntoView({ behavior: 'smooth' });
+                } else { showToast("Сначала пройдите тест."); }
+            });
+            professionSearchInput.addEventListener('input', filterProfessions);
+            resetProfessionFilterBtn.addEventListener('click', resetProfessionFilter);
+            showMoreProfessionsBtn.addEventListener('click', showMoreProfessions);
+            uniFilterSelect.addEventListener('change', () => { selectedForComparison = []; renderUniversities(); }); // Сброс сравнения при фильтрации
+            uniSortSelect.addEventListener('change', () => { selectedForComparison = []; renderUniversities(); }); // Сброс сравнения при сортировке
+            resetUniFilterBtn.addEventListener('click', resetUniversityFilters);
+            compareUnisBtn.addEventListener('click', showCompareModal); // Кнопка сравнения
+
+
+            // Делегирование событий для карточек ВУЗов (чекбокс + открытие модалки)
+            allUnisListDiv.addEventListener('click', (event) => {
+                const card = event.target.closest('.uni-card');
+                if (!card) return; // Клик мимо карточки
+
+
+                const uniName = card.dataset.uniName;
+                if (!uniName) return;
+
+
+                // Если клик по чекбоксу или его label
+                if (event.target.closest('.compare-checkbox-label')) {
+                    // Находим сам чекбокс, если кликнули по label
+                    const checkbox = event.target.tagName === 'INPUT' ? event.target : card.querySelector('.compare-checkbox');
+                    if (checkbox && event.target.tagName !== 'INPUT') {
+                        // Имитируем клик по чекбоксу, если кликнули по label
+                        // checkbox.checked = !checkbox.checked; // Это может вызвать двойное срабатывание, лучше не надо
+                    }
+                    // Обработчик handleCompareSelection сработает сам по событию change чекбокса
+                }
+                // Если клик НЕ по чекбоксу/label (а по картинке или контенту)
+                else if (event.target.closest('[data-action="open-modal"]')) {
+                    openUniModal(uniName);
+                }
+            });
+             // Отдельный обработчик для change чекбокса (надежнее)
+            allUnisListDiv.addEventListener('change', (event) => {
+                 if (event.target.classList.contains('compare-checkbox')) {
+                     handleCompareSelection(event);
+                 }
+            });
+
+
+             // Фильтрация вузов по клику на профессию
+             professionsListDiv.addEventListener('click', (event) => {
+                 const card = event.target.closest('.profession-card');
+                 if (card && card.dataset.professionName) {
+                     filterUniversitiesByProfession(card.dataset.professionName);
+                 }
+             });
+
+
+            addToFavoritesBtn.addEventListener('click', toggleFavorite);
+            clearProfileBtn.addEventListener('click', clearProfileData);
+        }
+
+
+        // --- Инициализация при загрузке страницы ---
+        document.addEventListener('DOMContentLoaded', () => {
+            initTheme(); // Сначала тема
+            processUniversityData();
+            populateUniFilterOptions();
+            renderUniversities();
+            renderProfessions();
+            setupEventListeners();
+            currentYearSpan.textContent = new Date().getFullYear();
+            initLucideIcons(); // Финальный вызов для всех иконок на странице
+        });
+
+
+    </script>
+</body>
+</html>
