@@ -156,6 +156,23 @@ const aiCoverLetterResult = document.getElementById('ai-cover-letter-result');
 
 
 // --- Utility Functions ---
+function getApiKey() {
+    let apiKey = localStorage.getItem('geminiApiKey');
+    if (apiKey) {
+        return apiKey;
+    } else {
+        apiKey = prompt("Пожалуйста, введите ваш Gemini API ключ:");
+        if (apiKey && apiKey.trim() !== "") {
+            localStorage.setItem('geminiApiKey', apiKey);
+            return apiKey;
+        } else {
+            console.warn("Ключ API Gemini не предоставлен.");
+            showToast("Ключ API Gemini отсутствует. AI функции не будут работать.", 3000);
+            return null;
+        }
+    }
+}
+
 function initLucideIcons() { try { if (window.lucide) { lucide.createIcons(); } else { console.warn("Lucide library not found."); } } catch (error) { console.error("Error initializing Lucide icons:", error); } }
 function initTheme() { const savedTheme = localStorage.getItem('unihubTheme') || 'light'; document.body.className = savedTheme; const iconName = savedTheme === 'dark' ? 'sun' : 'moon'; themeSwitchBtn.innerHTML = `<i class="icon icon-only" data-lucide="${iconName}"></i>`; themeSwitchBtn.title = savedTheme === 'dark' ? 'Переключить на светлую тему' : 'Переключить на темную тему'; initLucideIcons(); }
 function toggleTheme() { const isDark = document.body.classList.toggle('dark'); const newTheme = isDark ? 'dark' : 'light'; localStorage.setItem('unihubTheme', newTheme); const iconName = newTheme === 'dark' ? 'sun' : 'moon'; themeSwitchBtn.innerHTML = `<i class="icon icon-only" data-lucide="${iconName}"></i>`; themeSwitchBtn.title = newTheme === 'dark' ? 'Переключить на светлую тему' : 'Переключить на темную тему'; initLucideIcons(); }
